@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>I Plant Trees Every Day</title>
+  <style type="text/css">
+    html, body {
+      margin: 0;
+      padding: 0;
+    }
+    canvas {
+      display: block;
+    }
+  </style>
+</head>
+<body>
+  <script id="source" type="text/template">
+
+  function isNode(node) {
+    if (node == null) {
+      return false;
+    }
+    return typeof node === 'object' && typeof node.type === 'string';
+  }
+
+  </script>
+  <script src="vendor/esprima.js"></script>
+  <script src="vendor/three.js"></script>
+  <script src="vendor/three/OrbitControls.js"></script>
+
+  <script>
+    window.ipt = {
+      ast: {},
+      vis: {}
+    };
+  </script>
+  <script src="src/config.js"></script>
+  <script src="src/ast/properties.js"></script>
+  <script src="src/ast/transform.js"></script>
+  <script src="src/vis/utils.js"></script>
+  <script src="src/vis/scene.js"></script>
+  <script src="src/vis/parts.js"></script>
+  <script src="src/tree.js"></script>
+</body>
+</html>
