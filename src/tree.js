@@ -10,12 +10,14 @@
   // var TURN_QUATER = 0;
   var TILT = ipt.config.tilt;
 
-  var enableCut = true;
+  var enableCut = false;
 
 
   var sourceEl = document.getElementById('source');
 
   var source = sourceEl.innerHTML;
+
+  var cache = {};
 
   var ast = esprima.parse(source);
 
@@ -36,7 +38,7 @@
 
   console.time('draw');
 
-  var tree = draw(graph, 0);
+  var tree = draw(graph, 0, 0, 0, 0x00FF00);
 
   console.timeEnd('draw');
 
@@ -46,11 +48,13 @@
 
   // ---------------------------------------------
 
+  function draw(node, e, translateX, translateZ, color) {
 
+    var material = createMaterial(color);
+    var geometry = createGeometry(translateX, translateZ);
+    var stem = new THREE.Mesh(geometry, material);
 
-  function draw(node, e) {
-
-    var stem = ipt.vis.parts.createStem();
+    // var stem = ipt.vis.parts.createStem();
 
     if (node.children.length === 0) {
       var leaf = ipt.vis.parts.createLeaf();
@@ -77,13 +81,14 @@
     var tilt1 = ipt.vis.utils.toRad(TILT * weightRatio2); // alpha1
     var tilt2 = ipt.vis.utils.toRad(-TILT * weightRatio1); // alpha2
 
-    var translateX1 = 0;
-    var translateX2 = 0;
-    var translateZ1 = 0;
-    var translateZ2 = 0;
 
-    var translateXZ1 = Math.sin(tilt1) * ipt.config.stem.radius;
-    var translateXZ2 = Math.sin(tilt2) * ipt.config.stem.radius;
+    // var translateXZ1 = Math.sin(tilt1) * ipt.config.stem.radius;
+    // var translateX1 = Math.cos(TURN) * translateXZ1 * -1;
+    // var translateZ1 = Math.cos(TURN_QUATER) * translateXZ1;
+
+    // var translateXZ2 = Math.sin(tilt2) * ipt.config.stem.radius;
+    // var translateX2 = Math.cos(TURN) * translateXZ2 * -1;
+    // var translateZ2 = Math.cos(TURN_QUATER) * translateXZ2;
 
     var f;
 
@@ -96,15 +101,12 @@
 
     var dummy = ipt.vis.parts.createDummy();
 
-    var childStem1 = draw(branch1, 0);
+    var childStem1 = draw(branch1, 0, translateX1, translateZ1, 0x0000FF);
     if (childStem1) {
 
       childStem1.rotateY(TURN);
       childStem1.rotateZ(tilt1);
       childStem1.scale.set(scale1, scale1, scale1);
-
-      translateX1 = Math.cos(TURN) * translateXZ1 * -1;
-      translateZ1 = Math.cos(TURN_QUATER) * translateXZ1;
 
       if (enableCut && e > 0) {
         childStem1.position.set(0, 0, 0);
@@ -115,15 +117,12 @@
       }
     }
 
-    var childStem2 = draw(branch2, f - weight1);
+    var childStem2 = draw(branch2, f - weight1, translateX2, translateZ2, 0xFF0000);
     if (childStem2) {
 
       childStem2.rotateY(TURN);
       childStem2.rotateZ(tilt2);
       childStem2.scale.set(scale2, scale2, scale2);
-
-    //   translateX2 = Math.cos(TURN) * translateXZ2 * -1;
-    //   translateZ2 = Math.cos(TURN_QUATER) * translateXZ2;
 
       if (enableCut && e > 0) {
         childStem2.position.set(0, 0, 0);
@@ -139,6 +138,39 @@
     }
 
     return stem;
+  }
+
+  function createGeometry(translateX, translateZ) {
+    var geometry = new THREE.CylinderGeometry(
+      ipt.config.stem.radius,
+      ipt.config.stem.radius,
+      ipt.config.stem.height,
+      32
+    );
+
+    geometry.translate(
+      translateX,
+      ipt.config.stem.height / 2,
+      translateZ
+    );
+
+    return geometry;
+  }
+
+
+  function createMaterial(color) {
+    // if (cache.material) {
+    //   return cache.material;
+    // }
+
+    var material = new THREE.MeshBasicMaterial({
+      color: color || 0xFF0000,
+      wireframe: true
+    });
+
+    cache.material = material;
+
+    return material;
   }
 
 }());

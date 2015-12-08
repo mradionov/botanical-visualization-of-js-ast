@@ -4,23 +4,28 @@ ipt.vis.parts = (function () {
 
   return {
 
-    createStem: function () {
-      var cylinderGeometry = new THREE.CylinderGeometry(ipt.config.stem.radius, ipt.config.stem.radius, ipt.config.stem.height, 32);
+    createStem: function (opts) {
+      var geometry = new THREE.CylinderGeometry(
+        ipt.config.stem.radius,
+        ipt.config.stem.radius,
+        ipt.config.stem.height,
+        32
+      );
 
-      cylinderGeometry.translate(
+      geometry.translate(
         0,
         ipt.config.stem.height / 2,
         0
       );
 
-      var cylinderMaterial = new THREE.MeshBasicMaterial({
+      var material = new THREE.MeshBasicMaterial({
         color: 0xFF0000,
         wireframe: true
       });
 
-      var cylinderMesh = new THREE.Mesh(cylinderGeometry, cylinderMaterial);
+      var mesh = new THREE.Mesh(geometry, material);
 
-      return cylinderMesh;
+      return mesh;
     },
 
     createLeaf: function () {
