@@ -15,6 +15,7 @@ ipt.vis.scene = (function () {
       30000
     );
     camera.position.z = 1000;
+    camera.position.y = 700;
 
     renderer = new THREE.WebGLRenderer();
     renderer.setSize(window.innerWidth, window.innerHeight);

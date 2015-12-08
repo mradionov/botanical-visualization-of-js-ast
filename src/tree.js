@@ -27,10 +27,18 @@
 
   console.timeEnd('transform');
 
+  console.time('scene');
 
   var scene = ipt.vis.scene.init();
 
+  console.timeEnd('scene');
+
+
+  console.time('draw');
+
   var tree = draw(graph, 0);
+
+  console.timeEnd('draw');
 
   scene.add(tree);
 
@@ -81,7 +89,7 @@
 
 
     if (e <= 0) {
-      f = 0.3 * weight;
+      f = 0.1 * weight;
     } else {
       f = e;
     }
@@ -90,18 +98,13 @@
 
     var childStem1 = draw(branch1, 0);
     if (childStem1) {
-      // childStem1.rotateY(TURN);
+
+      childStem1.rotateY(TURN);
       childStem1.rotateZ(tilt1);
       childStem1.scale.set(scale1, scale1, scale1);
 
       translateX1 = Math.cos(TURN) * translateXZ1 * -1;
       translateZ1 = Math.cos(TURN_QUATER) * translateXZ1;
-
-      childStem1.geometry.translate(
-        0,
-        0,
-        0
-      );
 
       if (enableCut && e > 0) {
         childStem1.position.set(0, 0, 0);
@@ -115,18 +118,12 @@
     var childStem2 = draw(branch2, f - weight1);
     if (childStem2) {
 
-      // childStem2.rotateY(TURN);
+      childStem2.rotateY(TURN);
       childStem2.rotateZ(tilt2);
       childStem2.scale.set(scale2, scale2, scale2);
 
-      // translateX2 = Math.cos(TURN) * translateXZ2 * -1;
-      // translateZ2 = Math.cos(TURN_QUATER) * translateXZ2;
-
-      childStem2.geometry.translate(
-        0,
-        0,
-        0
-      );
+    //   translateX2 = Math.cos(TURN) * translateXZ2 * -1;
+    //   translateZ2 = Math.cos(TURN_QUATER) * translateXZ2;
 
       if (enableCut && e > 0) {
         childStem2.position.set(0, 0, 0);
