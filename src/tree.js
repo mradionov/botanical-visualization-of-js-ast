@@ -38,6 +38,72 @@
 
   console.time('draw');
 
+
+
+  /*
+
+  var material = new THREE.MeshBasicMaterial({
+    color: 0xFF0000,
+    wireframe: true
+  });
+  var geometry = new THREE.CylinderGeometry(100, 100, 300, 32);
+
+  geometry.translate(
+    0,
+    150,
+    0
+  );
+
+  var mesh = new THREE.Mesh(geometry, material);
+
+  mesh.position.set(
+    -150,
+    300,
+    0
+  );
+
+  mesh.rotateZ(-Math.PI / 4);
+
+
+
+  var cmaterial = new THREE.MeshBasicMaterial({
+    color: 0x0000FF,
+    wireframe: true
+  });
+
+  var cgeometry = new THREE.CylinderGeometry(100, 100, 300, 32);
+
+  cgeometry.translate(
+    0,
+    150,
+    0
+  );
+
+
+  var cmesh = new THREE.Mesh(cgeometry, cmaterial);
+
+  cmesh.position.set(
+    0,
+    300,
+    0
+  );
+
+  mesh.add(cmesh);
+
+
+
+
+  var bmaterial = new THREE.MeshBasicMaterial({
+    color: 0x00FF00,
+    wireframe: true
+  });
+  var bgeometry = new THREE.CubeGeometry(300, 300, 300);
+  var bmesh = new THREE.Mesh(bgeometry, bmaterial);
+
+  scene.add(mesh);
+  scene.add(bmesh);
+  //*/
+
   var tree = draw(graph, 0, 0, 0, 0x00FF00);
 
   console.timeEnd('draw');
@@ -82,13 +148,28 @@
     var tilt2 = ipt.vis.utils.toRad(-TILT * weightRatio1); // alpha2
 
 
-    // var translateXZ1 = Math.sin(tilt1) * ipt.config.stem.radius;
-    // var translateX1 = Math.cos(TURN) * translateXZ1 * -1;
-    // var translateZ1 = Math.cos(TURN_QUATER) * translateXZ1;
+    var translateXZ1 = Math.sin(tilt1) * ipt.config.stem.radius;
+    // var translateX1 = Math.cos(TURN) * translateXZ1;
+    var translateZ1 = Math.cos(TURN_QUATER) * translateXZ1;
 
-    // var translateXZ2 = Math.sin(tilt2) * ipt.config.stem.radius;
-    // var translateX2 = Math.cos(TURN) * translateXZ2 * -1;
-    // var translateZ2 = Math.cos(TURN_QUATER) * translateXZ2;
+    var translateXZ2 = Math.sin(tilt2) * ipt.config.stem.radius;
+    // var translateX2 = Math.cos(TURN) * translateXZ2;
+    var translateZ2 = Math.cos(TURN_QUATER) * translateXZ2;
+
+
+
+
+    var translateX1 = 0;
+    // var translateZ1 = 0;
+
+    var translateX2 = 0;
+    // var translateZ2 = 0;
+
+    console.log(tilt1, TURN);
+    console.log(translateX1, translateZ1);
+    console.log(translateX2, translateZ2);
+    console.log('------------');
+
 
     var f;
 
@@ -101,7 +182,7 @@
 
     var dummy = ipt.vis.parts.createDummy();
 
-    var childStem1 = draw(branch1, 0, translateX1, translateZ1, 0x0000FF);
+    var childStem1 = draw(branch1, 0, 0, 0, 0x0000FF);
     if (childStem1) {
 
       childStem1.rotateY(TURN);
@@ -112,12 +193,12 @@
         childStem1.position.set(0, 0, 0);
         dummy.add(childStem1);
       } else {
-        childStem1.position.set(0, ipt.config.stem.height, 0);
+        childStem1.position.set(translateX1, ipt.config.stem.height, translateZ1);
         stem.add(childStem1);
       }
     }
 
-    var childStem2 = draw(branch2, f - weight1, translateX2, translateZ2, 0xFF0000);
+    var childStem2 = draw(branch2, f - weight1, 0, 0, 0xFF0000);
     if (childStem2) {
 
       childStem2.rotateY(TURN);
@@ -128,7 +209,7 @@
         childStem2.position.set(0, 0, 0);
         dummy.add(childStem2);
       } else {
-        childStem2.position.set(0, ipt.config.stem.height, 0);
+        childStem2.position.set(translateX2, ipt.config.stem.height, translateZ2);
         stem.add(childStem2);
       }
     }
