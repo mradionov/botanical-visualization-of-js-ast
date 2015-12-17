@@ -1,12 +1,17 @@
 (function () {
   'use strict';
 
+  function toRad(deg) {
+    return deg * Math.PI / 180;
+  }
 
 
+  var HEIGHT = 300;
+  var RADIUS = 100;
 
-  var TURN = ipt.vis.utils.toRad(ipt.config.turn);
+  var TURN = toRad(ipt.config.turn);
   // var TURN = 0;
-  var TURN_QUATER = ipt.vis.utils.toRad(90 - ipt.config.turn);
+  var TURN_QUATER = toRad(90 - ipt.config.turn);
   // var TURN_QUATER = 0;
   var TILT = ipt.config.tilt;
 
@@ -39,14 +44,15 @@
   console.time('draw');
 
 
-
   /*
+
+  var ungle = -90;
 
   var material = new THREE.MeshBasicMaterial({
     color: 0xFF0000,
     wireframe: true
   });
-  var geometry = new THREE.CylinderGeometry(100, 100, 300, 32);
+  var geometry = new THREE.CylinderGeometry(150, 150, 300, 32);
 
   geometry.translate(
     0,
@@ -57,12 +63,12 @@
   var mesh = new THREE.Mesh(geometry, material);
 
   mesh.position.set(
+    150 - Math.cos(toRad(ungle)) * 150,
     -150,
-    300,
     0
   );
 
-  mesh.rotateZ(-Math.PI / 4);
+  mesh.rotateZ(toRad(ungle));
 
 
 
@@ -88,7 +94,7 @@
     0
   );
 
-  mesh.add(cmesh);
+  // mesh.add(cmesh);
 
 
 
@@ -144,26 +150,27 @@
     var scale1 = Math.sqrt(weightRatio1); // r1
     var scale2 = Math.sqrt(weightRatio2); // r2
 
-    var tilt1 = ipt.vis.utils.toRad(TILT * weightRatio2); // alpha1
-    var tilt2 = ipt.vis.utils.toRad(-TILT * weightRatio1); // alpha2
+    var tilt1 = toRad(TILT * weightRatio2); // alpha1
+    var tilt2 = toRad(-TILT * weightRatio1); // alpha2
 
 
-    var translateXZ1 = Math.sin(tilt1) * ipt.config.stem.radius;
+    // var translateXZ1 = Math.sin(tilt1) * RADIUS;
     // var translateX1 = Math.cos(TURN) * translateXZ1;
-    var translateZ1 = Math.cos(TURN_QUATER) * translateXZ1;
+    // var translateZ1 = Math.cos(TURN_QUATER) * translateXZ1;
 
-    var translateXZ2 = Math.sin(tilt2) * ipt.config.stem.radius;
+    // var translateXZ2 = Math.sin(tilt2) * RADIUS;
     // var translateX2 = Math.cos(TURN) * translateXZ2;
-    var translateZ2 = Math.cos(TURN_QUATER) * translateXZ2;
+    // var translateZ2 = Math.cos(TURN_QUATER) * translateXZ2;
 
 
+    var translateX1 = - RADIUS + Math.cos(tilt1) * RADIUS;
+    var translateX2 = RADIUS - Math.cos(tilt2) * RADIUS;
 
+    // var translateX1 = 0;
+    var translateZ1 = 0;
 
-    var translateX1 = 0;
-    // var translateZ1 = 0;
-
-    var translateX2 = 0;
-    // var translateZ2 = 0;
+    // var translateX2 = 0;
+    var translateZ2 = 0;
 
     console.log(tilt1, TURN);
     console.log(translateX1, translateZ1);
@@ -185,7 +192,7 @@
     var childStem1 = draw(branch1, 0, 0, 0, 0x0000FF);
     if (childStem1) {
 
-      childStem1.rotateY(TURN);
+      // childStem1.rotateY(TURN);
       childStem1.rotateZ(tilt1);
       childStem1.scale.set(scale1, scale1, scale1);
 
@@ -193,7 +200,7 @@
         childStem1.position.set(0, 0, 0);
         dummy.add(childStem1);
       } else {
-        childStem1.position.set(translateX1, ipt.config.stem.height, translateZ1);
+        childStem1.position.set(translateX1, HEIGHT, translateZ1);
         stem.add(childStem1);
       }
     }
@@ -201,7 +208,7 @@
     var childStem2 = draw(branch2, f - weight1, 0, 0, 0xFF0000);
     if (childStem2) {
 
-      childStem2.rotateY(TURN);
+      // childStem2.rotateY(TURN);
       childStem2.rotateZ(tilt2);
       childStem2.scale.set(scale2, scale2, scale2);
 
@@ -209,7 +216,7 @@
         childStem2.position.set(0, 0, 0);
         dummy.add(childStem2);
       } else {
-        childStem2.position.set(translateX2, ipt.config.stem.height, translateZ2);
+        childStem2.position.set(translateX2, HEIGHT, translateZ2);
         stem.add(childStem2);
       }
     }
@@ -223,16 +230,16 @@
 
   function createGeometry(translateX, translateZ) {
     var geometry = new THREE.CylinderGeometry(
-      ipt.config.stem.radius,
-      ipt.config.stem.radius,
-      ipt.config.stem.height,
+      RADIUS,
+      RADIUS,
+      HEIGHT,
       32
     );
 
     geometry.translate(
-      translateX,
-      ipt.config.stem.height / 2,
-      translateZ
+      0,
+      HEIGHT / 2,
+      0
     );
 
     return geometry;
