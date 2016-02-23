@@ -2,31 +2,25 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>I Plant Trees Every Day</title>
-  <style type="text/css">
-    html, body {
-      margin: 0;
-      padding: 0;
-    }
-    canvas {
-      display: block;
-    }
-  </style>
+  <title>Botanical Visualization of JavaScript AST</title>
+  <link rel="stylesheet" type="text/css" href="style/style.css">
 </head>
 <body>
+  <!-- Insert source code here -->
   <script id="source" type="text/template">
-
+    var foo = 10;
   </script>
+
+  <!-- Vendors -->
   <script src="vendor/esprima.js"></script>
   <script src="vendor/three.js"></script>
   <script src="vendor/three/OrbitControls.js"></script>
 
+  <!-- App -->
+  <script src="src/source.js"></script>
+  <script src="src/scene.js"></script>
   <script src="src/transform.js"></script>
   <script src="src/tree.js"></script>
-  <script src="src/run.js"></script>
-
-  <!-- <script src="src/vis/utils.js"></script> -->
-  <!-- <script src="src/vis/scene.js"></script> -->
-  <!-- <script src="src/vis/parts.js"></script> -->
+  <script src="src/main.js"></script>
 </body>
 </html>

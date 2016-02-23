@@ -1,3 +1,4 @@
+/* global THREE */
 var MOD_TREE = (function () {
   'use strict';
 
@@ -12,6 +13,9 @@ var MOD_TREE = (function () {
 
   // angle for y-axis rotation
   var TURN = 360 / GOLDEN_RATIO;
+  var TURN_RAD = toRad(TURN);
+
+  // var TURN_QUATER_RAD = toRad(90 - TURN);
 
   // angle for z-axis rotation
   var TILT = 90;
@@ -29,13 +33,6 @@ var MOD_TREE = (function () {
   function getBoundingBox(obj) {
     return (new THREE.Box3()).setFromObject(obj);
   }
-
-
-  var TURN = toRad(ipt.config.turn);
-  // var TURN = 0;
-  var TURN_QUATER = toRad(90 - ipt.config.turn);
-  // var TURN_QUATER = 0;
-  var TILT = ipt.config.tilt;
 
   /*
 
@@ -103,15 +100,13 @@ var MOD_TREE = (function () {
   scene.add(bmesh);
   //*/
 
-  var tree = draw(graph, 0, 0, 0, 0x00FF00);
+  //----------------------------------------------------------------------------
+  // Private
+  //----------------------------------------------------------------------------
 
-
-
-
-  // ---------------------------------------------
+  var cache = {};
 
   function draw(node, e, translateX, translateZ, color) {
-
     var material = createMaterial(color);
     var geometry = createGeometry(translateX, translateZ);
     var stem = new THREE.Mesh(geometry, material);
@@ -151,8 +146,8 @@ var MOD_TREE = (function () {
     // var translateZ2 = Math.cos(TURN_QUATER) * translateXZ2;
 
 
-    var translateX1 = - RADIUS + Math.cos(tilt1) * RADIUS;
-    var translateX2 = RADIUS - Math.cos(tilt2) * RADIUS;
+    var translateX1 = - STEM_RADIUS + Math.cos(tilt1) * STEM_RADIUS;
+    var translateX2 = STEM_RADIUS - Math.cos(tilt2) * STEM_RADIUS;
 
     // var translateX1 = 0;
     var translateZ1 = 0;
@@ -160,7 +155,8 @@ var MOD_TREE = (function () {
     // var translateX2 = 0;
     var translateZ2 = 0;
 
-    console.log(tilt1, TURN);
+    console.log('------------');
+    console.log(tilt1, TURN_RAD);
     console.log(translateX1, translateZ1);
     console.log(translateX2, translateZ2);
     console.log('------------');
@@ -175,20 +171,20 @@ var MOD_TREE = (function () {
       f = e;
     }
 
-    var dummy = ipt.vis.parts.createDummy();
+    var dummy = createDummy();
 
     var childStem1 = draw(branch1, 0, 0, 0, 0x0000FF);
     if (childStem1) {
 
-      childStem1.rotateY(TURN);
+      childStem1.rotateY(TURN_RAD);
       childStem1.rotateZ(tilt1);
       childStem1.scale.set(scale1, scale1, scale1);
 
-      if (enableCut && e > 0) {
+      if (ENABLE_CUT && e > 0) {
         childStem1.position.set(0, 0, 0);
         dummy.add(childStem1);
       } else {
-        childStem1.position.set(translateX1, HEIGHT, translateZ1);
+        childStem1.position.set(translateX1, STEM_HEIGHT, translateZ1);
         stem.add(childStem1);
       }
     }
@@ -196,20 +192,20 @@ var MOD_TREE = (function () {
     var childStem2 = draw(branch2, f - weight1, 0, 0, 0xFF0000);
     if (childStem2) {
 
-      childStem2.rotateY(TURN);
+      childStem2.rotateY(TURN_RAD);
       childStem2.rotateZ(tilt2);
       childStem2.scale.set(scale2, scale2, scale2);
 
-      if (enableCut && e > 0) {
+      if (ENABLE_CUT && e > 0) {
         childStem2.position.set(0, 0, 0);
         dummy.add(childStem2);
       } else {
-        childStem2.position.set(translateX2, HEIGHT, translateZ2);
+        childStem2.position.set(translateX2, STEM_HEIGHT, translateZ2);
         stem.add(childStem2);
       }
     }
 
-    if (enableCut && e > 0) {
+    if (ENABLE_CUT && e > 0) {
       return dummy;
     }
 
@@ -218,15 +214,15 @@ var MOD_TREE = (function () {
 
   function createGeometry(translateX, translateZ) {
     var geometry = new THREE.CylinderGeometry(
-      RADIUS,
-      RADIUS,
-      HEIGHT,
+      STEM_RADIUS,
+      STEM_RADIUS,
+      STEM_HEIGHT,
       32
     );
 
     geometry.translate(
       0,
-      HEIGHT / 2,
+      STEM_HEIGHT / 2,
       0
     );
 
@@ -244,9 +240,20 @@ var MOD_TREE = (function () {
       wireframe: true
     });
 
-    cache.material = material;
+    // cache.material = material;
 
     return material;
+  }
+
+  function createDummy() {
+    var geometry = new THREE.BoxGeometry(STEM_RADIUS * 2, 0, STEM_RADIUS * 2);
+    var material = new THREE.MeshBasicMaterial({
+      color: 0x0000FF,
+      wireframe: false,
+      visible: false
+    });
+    var mesh = new THREE.Mesh(geometry, material);
+    return mesh;
   }
 
   //----------------------------------------------------------------------------

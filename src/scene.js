@@ -1,4 +1,10 @@
-var MOD_SCENE = (function (tree) { 'use strict';
+/* global THREE */
+var MOD_SCENE = (function (tree) {
+  'use strict';
+
+  //----------------------------------------------------------------------------
+  // Private
+  //----------------------------------------------------------------------------
 
   var scene, camera, renderer, controls;
 
@@ -32,6 +38,10 @@ var MOD_SCENE = (function (tree) { 'use strict';
     requestAnimationFrame(animate);
     renderer.render(scene, camera);
   }
+
+  //----------------------------------------------------------------------------
+  // Public
+  //----------------------------------------------------------------------------
 
   return {
     init: init
