@@ -6,3 +6,11 @@ html, body {
 canvas {
   display: block;
 }
+
+pre {
+  position: absolute;
+  top: 0;
+  right: 0;
+  color: #fff;
+  margin-right: 10px;
+}

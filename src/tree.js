@@ -116,6 +116,8 @@ var MOD_TREE = (function () {
       return ;
     }
 
+    stem.custom = node;
+
     var weight = node.weight;      // s
 
     var branch1 = node.children.shift(); // d1
