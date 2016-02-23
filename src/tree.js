@@ -1,48 +1,41 @@
-(function () {
+var MOD_TREE = (function () {
   'use strict';
+
+  //----------------------------------------------------------------------------
+  // Constants
+  //----------------------------------------------------------------------------
+
+  var GOLDEN_RATIO = (1 + Math.sqrt(5)) / 2;
+
+  var STEM_HEIGHT = 300;
+  var STEM_RADIUS = 100;
+
+  // angle for y-axis rotation
+  var TURN = 360 / GOLDEN_RATIO;
+
+  // angle for z-axis rotation
+  var TILT = 90;
+
+  var ENABLE_CUT = false;
+
+  //----------------------------------------------------------------------------
+  // Helpers
+  //----------------------------------------------------------------------------
 
   function toRad(deg) {
     return deg * Math.PI / 180;
   }
 
+  function getBoundingBox(obj) {
+    return (new THREE.Box3()).setFromObject(obj);
+  }
 
-  var HEIGHT = 300;
-  var RADIUS = 100;
 
   var TURN = toRad(ipt.config.turn);
   // var TURN = 0;
   var TURN_QUATER = toRad(90 - ipt.config.turn);
   // var TURN_QUATER = 0;
   var TILT = ipt.config.tilt;
-
-  var enableCut = false;
-
-
-  var sourceEl = document.getElementById('source');
-
-  var source = sourceEl.innerHTML;
-
-  var cache = {};
-
-  var ast = esprima.parse(source);
-
-  console.dir(ast);
-
-  console.time('transform');
-
-  var graph = ipt.ast.transform(ast);
-
-  console.timeEnd('transform');
-
-  console.time('scene');
-
-  var scene = ipt.vis.scene.init();
-
-  console.timeEnd('scene');
-
-
-  console.time('draw');
-
 
   /*
 
@@ -112,9 +105,6 @@
 
   var tree = draw(graph, 0, 0, 0, 0x00FF00);
 
-  console.timeEnd('draw');
-
-  scene.add(tree);
 
 
 
@@ -126,10 +116,8 @@
     var geometry = createGeometry(translateX, translateZ);
     var stem = new THREE.Mesh(geometry, material);
 
-    // var stem = ipt.vis.parts.createStem();
-
     if (node.children.length === 0) {
-      var leaf = ipt.vis.parts.createLeaf();
+      // create leaf
       return ;
     }
 
@@ -192,7 +180,7 @@
     var childStem1 = draw(branch1, 0, 0, 0, 0x0000FF);
     if (childStem1) {
 
-      // childStem1.rotateY(TURN);
+      childStem1.rotateY(TURN);
       childStem1.rotateZ(tilt1);
       childStem1.scale.set(scale1, scale1, scale1);
 
@@ -208,7 +196,7 @@
     var childStem2 = draw(branch2, f - weight1, 0, 0, 0xFF0000);
     if (childStem2) {
 
-      // childStem2.rotateY(TURN);
+      childStem2.rotateY(TURN);
       childStem2.rotateZ(tilt2);
       childStem2.scale.set(scale2, scale2, scale2);
 
@@ -260,5 +248,13 @@
 
     return material;
   }
+
+  //----------------------------------------------------------------------------
+  // Public API
+  //----------------------------------------------------------------------------
+
+  return {
+    draw: draw
+  };
 
 }());

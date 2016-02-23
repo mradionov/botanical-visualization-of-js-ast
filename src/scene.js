@@ -1,6 +1,4 @@
-'use strict';
-
-ipt.vis.scene = (function () {
+var MOD_SCENE = (function (tree) { 'use strict';
 
   var scene, camera, renderer, controls;
 
@@ -39,4 +37,4 @@ ipt.vis.scene = (function () {
     init: init
   };
 
-})();
+}());
