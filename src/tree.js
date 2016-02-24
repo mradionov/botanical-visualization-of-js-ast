@@ -106,17 +106,16 @@ var MOD_TREE = (function () {
 
   var cache = {};
 
-  function draw(node, e, translateX, translateZ, color) {
+  function draw(node, e, color) {
     var material = createMaterial(color);
-    var geometry = createGeometry(translateX, translateZ);
+    var geometry = createGeometry();
     var stem = new THREE.Mesh(geometry, material);
 
-    if (node.children.length === 0) {
-      // create leaf
-      return ;
-    }
-
     stem.custom = node;
+
+    if (node.children.length === 0) {
+      return stem;
+    }
 
     var weight = node.weight;      // s
 
@@ -148,7 +147,7 @@ var MOD_TREE = (function () {
     // var translateZ2 = Math.cos(TURN_QUATER) * translateXZ2;
 
 
-    var translateX1 = - STEM_RADIUS + Math.cos(tilt1) * STEM_RADIUS;
+    var translateX1 = -STEM_RADIUS + Math.cos(tilt1) * STEM_RADIUS;
     var translateX2 = STEM_RADIUS - Math.cos(tilt2) * STEM_RADIUS;
 
     // var translateX1 = 0;
@@ -157,12 +156,14 @@ var MOD_TREE = (function () {
     // var translateX2 = 0;
     var translateZ2 = 0;
 
+    /*
     console.log('------------');
     console.log(tilt1, TURN_RAD);
     console.log(translateX1, translateZ1);
     console.log(translateX2, translateZ2);
     console.log('------------');
 
+    */
 
     var f;
 
@@ -175,10 +176,10 @@ var MOD_TREE = (function () {
 
     var dummy = createDummy();
 
-    var childStem1 = draw(branch1, 0, 0, 0, 0x0000FF);
+    var childStem1 = draw(branch1, 0, 0x0000FF);
     if (childStem1) {
 
-      childStem1.rotateY(TURN_RAD);
+      // childStem1.rotateY(TURN_RAD);
       childStem1.rotateZ(tilt1);
       childStem1.scale.set(scale1, scale1, scale1);
 
@@ -191,10 +192,10 @@ var MOD_TREE = (function () {
       }
     }
 
-    var childStem2 = draw(branch2, f - weight1, 0, 0, 0xFF0000);
+    var childStem2 = draw(branch2, f - weight1, 0xFF0000);
     if (childStem2) {
 
-      childStem2.rotateY(TURN_RAD);
+      // childStem2.rotateY(TURN_RAD);
       childStem2.rotateZ(tilt2);
       childStem2.scale.set(scale2, scale2, scale2);
 
@@ -214,7 +215,7 @@ var MOD_TREE = (function () {
     return stem;
   }
 
-  function createGeometry(translateX, translateZ) {
+  function createGeometry() {
     var geometry = new THREE.CylinderGeometry(
       STEM_RADIUS,
       STEM_RADIUS,
