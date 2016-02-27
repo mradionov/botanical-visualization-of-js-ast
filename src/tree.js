@@ -12,10 +12,9 @@ var MOD_TREE = (function () {
   var STEM_RADIUS = 100;
 
   // angle for y-axis rotation
-  var TURN = 360 / GOLDEN_RATIO;
+  var TURN = 360 / GOLDEN_RATIO; // ~ 222 degrees
   var TURN_RAD = toRad(TURN);
-
-  // var TURN_QUATER_RAD = toRad(90 - TURN);
+  var TURN_REV_RAD = toRad(360 - TURN);
 
   // angle for z-axis rotation
   var TILT = 90;
@@ -137,33 +136,21 @@ var MOD_TREE = (function () {
     var tilt1 = toRad(TILT * weightRatio2); // alpha1
     var tilt2 = toRad(-TILT * weightRatio1); // alpha2
 
+    // TODO: shift both x and y to get proper dist
 
-    // var translateXZ1 = Math.sin(tilt1) * RADIUS;
-    // var translateX1 = Math.cos(TURN) * translateXZ1;
-    // var translateZ1 = Math.cos(TURN_QUATER) * translateXZ1;
+    var tiltRatio1 = tilt1 / toRad(90);
+    var translateDist1 = STEM_RADIUS * tiltRatio1;
 
-    // var translateXZ2 = Math.sin(tilt2) * RADIUS;
-    // var translateX2 = Math.cos(TURN) * translateXZ2;
-    // var translateZ2 = Math.cos(TURN_QUATER) * translateXZ2;
+    var tiltRatio2 = tilt2 / toRad(90);
+    var translateDist2 = STEM_RADIUS * tiltRatio2;
 
 
-    var translateX1 = -STEM_RADIUS + Math.cos(tilt1) * STEM_RADIUS;
-    var translateX2 = STEM_RADIUS - Math.cos(tilt2) * STEM_RADIUS;
+    var translateX1 = -(translateDist1 * Math.sin(TURN_RAD));
+    var translateZ1 = -(translateDist1 * Math.sin(TURN_REV_RAD));
 
-    // var translateX1 = 0;
-    var translateZ1 = 0;
+    var translateX2 = -(translateDist2 * Math.sin(TURN_RAD));
+    var translateZ2 = -(translateDist2 * Math.sin(TURN_REV_RAD));
 
-    // var translateX2 = 0;
-    var translateZ2 = 0;
-
-    /*
-    console.log('------------');
-    console.log(tilt1, TURN_RAD);
-    console.log(translateX1, translateZ1);
-    console.log(translateX2, translateZ2);
-    console.log('------------');
-
-    */
 
     var f;
 
@@ -179,7 +166,7 @@ var MOD_TREE = (function () {
     var childStem1 = draw(branch1, 0, 0x0000FF);
     if (childStem1) {
 
-      // childStem1.rotateY(TURN_RAD);
+      childStem1.rotateY(TURN_RAD);
       childStem1.rotateZ(tilt1);
       childStem1.scale.set(scale1, scale1, scale1);
 
@@ -195,7 +182,7 @@ var MOD_TREE = (function () {
     var childStem2 = draw(branch2, f - weight1, 0xFF0000);
     if (childStem2) {
 
-      // childStem2.rotateY(TURN_RAD);
+      childStem2.rotateY(TURN_RAD);
       childStem2.rotateZ(tilt2);
       childStem2.scale.set(scale2, scale2, scale2);
 
