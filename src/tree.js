@@ -134,21 +134,18 @@ var MOD_TREE = (function () {
     var scale2 = Math.sqrt(weightRatio2); // r2
 
     var tilt1 = toRad(TILT * weightRatio2); // alpha1
-    var tilt2 = toRad(-TILT * weightRatio1); // alpha2
+    var tilt2 = toRad(TILT * weightRatio1); // alpha2
 
-    // TODO: shift both x and y to get proper dist
 
-    var tiltRatio1 = tilt1 / toRad(90);
-    var translateDist1 = STEM_RADIUS * tiltRatio1;
-
-    var tiltRatio2 = tilt2 / toRad(90);
-    var translateDist2 = STEM_RADIUS * tiltRatio2;
-
+    var translateDist1 = STEM_RADIUS * tilt1 / toRad(90);
+    var translateDist2 = STEM_RADIUS * - tilt2 / toRad(90);
 
     var translateX1 = -(translateDist1 * Math.sin(TURN_RAD));
+    var translateY1 = - (Math.sin(tilt1) * STEM_RADIUS);
     var translateZ1 = -(translateDist1 * Math.sin(TURN_REV_RAD));
 
     var translateX2 = -(translateDist2 * Math.sin(TURN_RAD));
+    var translateY2 = - (Math.sin(tilt2) * STEM_RADIUS * scale2);
     var translateZ2 = -(translateDist2 * Math.sin(TURN_REV_RAD));
 
 
@@ -174,7 +171,7 @@ var MOD_TREE = (function () {
         childStem1.position.set(0, 0, 0);
         dummy.add(childStem1);
       } else {
-        childStem1.position.set(translateX1, STEM_HEIGHT, translateZ1);
+        childStem1.position.set(translateX1, STEM_HEIGHT + translateY1, translateZ1);
         stem.add(childStem1);
       }
     }
@@ -183,14 +180,14 @@ var MOD_TREE = (function () {
     if (childStem2) {
 
       childStem2.rotateY(TURN_RAD);
-      childStem2.rotateZ(tilt2);
+      childStem2.rotateZ(-tilt2);
       childStem2.scale.set(scale2, scale2, scale2);
 
       if (ENABLE_CUT && e > 0) {
         childStem2.position.set(0, 0, 0);
         dummy.add(childStem2);
       } else {
-        childStem2.position.set(translateX2, STEM_HEIGHT, translateZ2);
+        childStem2.position.set(translateX2, STEM_HEIGHT + translateY2, translateZ2);
         stem.add(childStem2);
       }
     }
