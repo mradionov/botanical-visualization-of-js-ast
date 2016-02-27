@@ -105,6 +105,10 @@ var MOD_TREE = (function () {
 
   var cache = {};
 
+  var loader = new THREE.TextureLoader();
+  var texture = loader.load('images/texture.png');
+
+
   function draw(node, e, color) {
     var material = createMaterial(color);
     var geometry = createGeometry();
@@ -223,6 +227,7 @@ var MOD_TREE = (function () {
     // }
 
     var material = new THREE.MeshBasicMaterial({
+      // map: texture,
       color: color || 0xFF0000,
       wireframe: true
     });
