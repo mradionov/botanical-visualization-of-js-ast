@@ -27,10 +27,6 @@ var MOD_TREE = (function () {
     return deg * Math.PI / 180;
   }
 
-  function getBoundingBox(obj) {
-    return (new THREE.Box3()).setFromObject(obj);
-  }
-
   //----------------------------------------------------------------------------
   // Private
   //----------------------------------------------------------------------------
@@ -41,71 +37,40 @@ var MOD_TREE = (function () {
   var texture = loader.load('images/texture.png');
 
 
-  function draw(node, color) {
+  function draw(branchedNode, color) {
     var material = createMaterial(color);
     var geometry = createGeometry();
     var stem = new THREE.Mesh(geometry, material);
 
-    stem.custom = node;
+    stem.custom = branchedNode;
 
-    if (node.children.length === 0) {
+    if (!branchedNode) {
       return stem;
     }
 
-    var weight = node.weight;      // s
+    if (!branchedNode.isRoot) {
 
-    var branch1 = node.children.shift(); // d1
-    node.weight -= branch1.weight;
+      var tilt = toRad(TILT * branchedNode.weightRatio);
 
-    // get what is left from parent without largest child
-    var branch2 = node;                  // d2
+      var translateDist = STEM_RADIUS * tilt / toRad(90);
+      if (branchedNode.isParentContinuation) {
+        translateDist = -translateDist;
+      }
 
-    var weight1 = branch1.weight; // s1
-    var weight2 = branch2.weight; // s2
+      var translateX = -(translateDist * Math.sin(TURN_RAD));
+      var translateY = - (Math.sin(tilt) * STEM_RADIUS);
+      var translateZ = - (translateDist * Math.sin(TURN_REV_RAD));
 
-    var weightRatio1 = weight1 / weight;
-    var weightRatio2 = weight2 / weight;
+      stem.rotateY(TURN_RAD);
+      stem.rotateZ(branchedNode.isParentContinuation ? -tilt : tilt);
 
-    var scale1 = Math.sqrt(weightRatio1); // r1
-    var scale2 = Math.sqrt(weightRatio2); // r2
+      stem.scale.set(branchedNode.scale, branchedNode.scale, branchedNode.scale);
 
-    var tilt1 = toRad(TILT * weightRatio2); // alpha1
-    var tilt2 = toRad(TILT * weightRatio1); // alpha2
-
-
-    var translateDist1 = STEM_RADIUS * tilt1 / toRad(90);
-    var translateDist2 = STEM_RADIUS * - tilt2 / toRad(90);
-
-    var translateX1 = -(translateDist1 * Math.sin(TURN_RAD));
-    var translateY1 = - (Math.sin(tilt1) * STEM_RADIUS);
-    var translateZ1 = -(translateDist1 * Math.sin(TURN_REV_RAD));
-
-    var translateX2 = -(translateDist2 * Math.sin(TURN_RAD));
-    var translateY2 = - (Math.sin(tilt2) * STEM_RADIUS * scale2);
-    var translateZ2 = -(translateDist2 * Math.sin(TURN_REV_RAD));
-
-
-    var childStem1 = draw(branch1, 0x0000FF);
-    if (childStem1) {
-
-      childStem1.rotateY(TURN_RAD);
-      childStem1.rotateZ(tilt1);
-      childStem1.scale.set(scale1, scale1, scale1);
-
-      childStem1.position.set(translateX1, STEM_HEIGHT + translateY1, translateZ1);
-      stem.add(childStem1);
+      stem.position.set(translateX, STEM_HEIGHT + translateY, translateZ);
     }
 
-    var childStem2 = draw(branch2, 0xFF0000);
-    if (childStem2) {
-
-      childStem2.rotateY(TURN_RAD);
-      childStem2.rotateZ(-tilt2);
-      childStem2.scale.set(scale2, scale2, scale2);
-
-      childStem2.position.set(translateX2, STEM_HEIGHT + translateY2, translateZ2);
-      stem.add(childStem2);
-    }
+    stem.add(draw(branchedNode.branch1, 0x0000FF));
+    stem.add(draw(branchedNode.branch2, 0xFF0000));
 
     return stem;
   }

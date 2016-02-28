@@ -70,7 +70,7 @@ var MOD_SCENE = (function (tree) {
       return;
     }
 
-    var node = intersects[0].object.custom.node;
+    var node = intersects[0].object.custom.astNode;
     var string = JSON.stringify(node, function (key, value) {
       if (Array.isArray(value)) {
         return '[...]';
