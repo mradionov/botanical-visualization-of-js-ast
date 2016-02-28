@@ -31,18 +31,13 @@ var MOD_TREE = (function () {
   // Private
   //----------------------------------------------------------------------------
 
-  var cache = {};
-
   var loader = new THREE.TextureLoader();
   var texture = loader.load('images/texture.png');
 
 
   function draw(branchedNode, color) {
-    var material = createMaterial(color);
-    var geometry = createGeometry();
-    var stem = new THREE.Mesh(geometry, material);
 
-    stem.custom = branchedNode;
+    var stem = createStem(branchedNode, color);
 
     if (!branchedNode) {
       return stem;
@@ -64,18 +59,39 @@ var MOD_TREE = (function () {
       stem.rotateY(TURN_RAD);
       stem.rotateZ(branchedNode.isParentContinuation ? -tilt : tilt);
 
-      stem.scale.set(branchedNode.scale, branchedNode.scale, branchedNode.scale);
+      stem.scale.set(
+        branchedNode.relativeScale,
+        branchedNode.relativeScale,
+        branchedNode.relativeScale
+      );
 
-      stem.position.set(translateX, STEM_HEIGHT + translateY, translateZ);
+      stem.position.set(
+        translateX,
+        STEM_HEIGHT + translateY,
+        translateZ
+      );
     }
 
+    // lol wut
     stem.add(draw(branchedNode.branch1, 0x0000FF));
     stem.add(draw(branchedNode.branch2, 0xFF0000));
 
     return stem;
   }
 
-  function createGeometry() {
+  function createStem(branchedNode, color) {
+    branchedNode = branchedNode || {};
+
+    var color = color || 0x00FF00;
+
+    var material = new THREE.MeshBasicMaterial({
+      // map: texture,
+      color: color,
+      wireframe: true
+    });
+
+
+
     var geometry = new THREE.CylinderGeometry(
       STEM_RADIUS,
       STEM_RADIUS,
@@ -88,24 +104,11 @@ var MOD_TREE = (function () {
     // You have to compensate this translation when adding stem on the scene.
     geometry.translate(0, STEM_HEIGHT / 2, 0);
 
-    return geometry;
-  }
+    var mesh = new THREE.Mesh(geometry, material);
 
+    mesh.custom = branchedNode;
 
-  function createMaterial(color) {
-    // if (cache.material) {
-    //   return cache.material;
-    // }
-
-    var material = new THREE.MeshBasicMaterial({
-      // map: texture,
-      color: color || 0xFF0000,
-      wireframe: true
-    });
-
-    // cache.material = material;
-
-    return material;
+    return mesh;
   }
 
   //----------------------------------------------------------------------------

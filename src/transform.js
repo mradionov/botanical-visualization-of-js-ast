@@ -97,6 +97,14 @@ var MOD_TRANSFORM = (function () {
     return (nodeType === 'ObjectExpression' || nodeType === 'ObjectPattern') && key === 'properties';
   }
 
+  function extend(dest, source) {
+    for (var key in source) {
+      if (source.hasOwnProperty(key)) {
+        dest[key] = source[key];
+      }
+    }
+  }
+
   //----------------------------------------------------------------------------
   // Private
   //----------------------------------------------------------------------------
@@ -176,20 +184,15 @@ var MOD_TRANSFORM = (function () {
     return weightedNode;
   }
 
-  function createBranchedTree(
-    weightedNode, isRoot, isParentContinuation, weight, weightRatio, scale
-  ) {
+  function createBranchedTree(weightedNode, branchedNodeParams) {
 
     var branchedNode = {
       astNode: weightedNode.astNode,
       branch1: undefined,
-      branch2: undefined,
-      isRoot: isRoot,
-      isParentContinuation: typeof isParentContinuation === undefined ? false : isParentContinuation,
-      weight: typeof weight === undefined ? weightedNode.weight : weight,
-      weightRatio: typeof weightRatio === undefined ? 1 : weightRatio,
-      scale: typeof scale === undefined ? 1 : scale
+      branch2: undefined
     };
+
+    extend(branchedNode, branchedNodeParams);
 
     if (weightedNode.children.length === 0) {
       return branchedNode;
@@ -214,20 +217,39 @@ var MOD_TRANSFORM = (function () {
     var scale1 = Math.sqrt(weightRatio1); // r1
     var scale2 = Math.sqrt(weightRatio2); // r2
 
-    branchedNode.branch1 = createBranchedTree(
-      branch1, false, false, weight1, weightRatio2, scale1
-    );
+    branchedNode.computedScale *= Math.max(scale1, scale2);
 
-    branchedNode.branch2 = createBranchedTree(
-      branch2, false, true, weight2, weightRatio1, scale2
-    );
+    branchedNode.branch1 = createBranchedTree(branch1, {
+      isRoot: false,
+      isParentContinuation: false,
+      weight: weight1,
+      weightRatio: weightRatio2,
+      relativeScale: scale1,
+      computedScale: branchedNode.computedScale
+    });
+
+    branchedNode.branch2 = createBranchedTree(branch2, {
+      isRoot: false,
+      isParentContinuation: true,
+      weight: weight2,
+      weightRatio: weightRatio1,
+      relativeScale: scale2,
+      computedScale: branchedNode.computedScale
+    });
 
     return branchedNode;
   }
 
   function transform(astTree) {
     var weightedTree = createWeightedTree(astTree);
-    var branchedTree = createBranchedTree(weightedTree, true);
+    var branchedTree = createBranchedTree(weightedTree, {
+      isRoot: true,
+      isParentContinuation: false,
+      weight: 0,
+      weightRatio: 1,
+      relativeScale: 1,
+      computedScale: 1
+    });
 
     return branchedTree;
   }
