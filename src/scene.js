@@ -12,13 +12,17 @@ var MOD_SCENE = (function (tree) {
 
   var controls, raycaster, mouse;
 
+  var container = document.querySelector('[data-scene]');
+
+  console.log(container);
+
   function init() {
 
     scene = new THREE.Scene();
 
     camera = new THREE.PerspectiveCamera(
       75,
-      window.innerWidth / window.innerHeight,
+      container.offsetWidth / container.offsetHeight,
       1,
       30000
     );
@@ -26,8 +30,8 @@ var MOD_SCENE = (function (tree) {
     camera.position.y = 700;
 
     renderer = new THREE.WebGLRenderer();
-    renderer.setSize(window.innerWidth, window.innerHeight);
-    document.body.appendChild(renderer.domElement);
+    renderer.setSize(container.offsetWidth, container.offsetHeight);
+    container.appendChild(renderer.domElement);
 
     controls = new THREE.OrbitControls(camera, renderer.domElement);
     controls.enableZoom = true;
@@ -36,8 +40,7 @@ var MOD_SCENE = (function (tree) {
     mouse = new THREE.Vector2();
 
     stats = new Stats();
-    stats.domElement.style.position = 'absolute';
-    stats.domElement.style.top = '0px';
+    stats.domElement.className = 'stats'
     document.body.appendChild(stats.domElement);
 
     $node = document.createElement('pre');
