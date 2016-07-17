@@ -19,6 +19,18 @@ var MOD_TREE = (function () {
   // angle for z-axis rotation
   var TILT = 90;
 
+  var geometry = new THREE.CylinderGeometry(
+    STEM_RADIUS,
+    STEM_RADIUS,
+    STEM_HEIGHT,
+    32
+  );
+
+  // Translate geometry itself within a mesh to create a virtual pivot
+  // point for rotation - it allows to rotate a stem starting from the bottom.
+  // You have to compensate this translation when adding stem on the scene.
+  geometry.translate(0, STEM_HEIGHT / 2, 0);
+
   //----------------------------------------------------------------------------
   // Helpers
   //----------------------------------------------------------------------------
@@ -89,20 +101,6 @@ var MOD_TREE = (function () {
       color: color,
       wireframe: true
     });
-
-
-
-    var geometry = new THREE.CylinderGeometry(
-      STEM_RADIUS,
-      STEM_RADIUS,
-      STEM_HEIGHT,
-      32
-    );
-
-    // Translate geometry itself within a mesh to create a virtual pivot
-    // point for rotation - it allows to rotate a stem starting from the bottom.
-    // You have to compensate this translation when adding stem on the scene.
-    geometry.translate(0, STEM_HEIGHT / 2, 0);
 
     var mesh = new THREE.Mesh(geometry, material);
 
