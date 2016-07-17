@@ -19,10 +19,12 @@
   },
   "devDependencies": {
     "browserify": "^13.0.1",
+    "gh-pages": "^0.11.0",
     "watchify": "^3.7.0"
   },
   "scripts": {
     "build": "browserify src/main.js -o dist/bundle.js",
-    "watch": "watchify src/main.js -o dist/bundle.js -v"
+    "watch": "watchify src/main.js -o dist/bundle.js -v",
+    "publish": "npm run build && gh-pages -d dist -n"
   }
 }
