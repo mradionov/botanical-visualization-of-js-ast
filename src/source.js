@@ -1,23 +1,12 @@
-var MOD_SOURCE = (function () {
-  'use strict';
+'use strict';
 
-  //----------------------------------------------------------------------------
-  // Private
-  //----------------------------------------------------------------------------
+//------------------------------------------------------------------------------
+// Module
+//------------------------------------------------------------------------------
 
-  var $element = document.getElementById('source');
-  var source = $element.innerHTML;
+var $element = document.getElementById('source');
+var source = $element.innerHTML;
 
-  function getSource() {
-    return source;
-  }
-
-  //----------------------------------------------------------------------------
-  // Public
-  //----------------------------------------------------------------------------
-
-  return {
-    getSource: getSource
-  };
-
-}());
+module.exports = function getSource() {
+  return source;
+}

@@ -1,27 +1,38 @@
-/* global esprima, MOD_SOURCE, MOD_TRANSFORM, MOD_SCENE, MOD_TREE */
-(function () {
-  'use strict';
+'use strict';
 
-  var source = MOD_SOURCE.getSource();
+//------------------------------------------------------------------------------
+// Requirements
+//------------------------------------------------------------------------------
 
-  console.time('parse');
-  var ast = esprima.parse(source);
-  console.timeEnd('parse');
+var esprima = require('esprima');
 
-  console.time('transform');
-  var astTransformed = MOD_TRANSFORM.transform(ast);
-  console.timeEnd('transform');
+var getSource = require('./source');
+var transform = require('./transform');
+var createScene = require('./scene');
+var drawTree = require('./tree');
 
-  console.dir(astTransformed);
+//------------------------------------------------------------------------------
+// Module
+//------------------------------------------------------------------------------
 
-  var scene = MOD_SCENE.init();
+var source = getSource();
 
-  console.time('draw');
-  var tree = MOD_TREE.draw(astTransformed, 0x00FF00);
-  console.timeEnd('draw');
+console.time('parse');
+var ast = esprima.parse(source);
+console.timeEnd('parse');
 
-  console.dir(tree);
+console.time('transform');
+var astTransformed = transform(ast);
+console.timeEnd('transform');
 
-  scene.add(tree);
+console.dir(astTransformed);
 
-}());
+var scene = createScene();
+
+console.time('draw');
+var tree = drawTree(astTransformed, 0x00FF00);
+console.timeEnd('draw');
+
+console.dir(tree);
+
+scene.add(tree);

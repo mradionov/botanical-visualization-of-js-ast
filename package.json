@@ -16,5 +16,13 @@
     "esprima": "^2.7.2",
     "stats.js": "^0.16.0",
     "three": "^0.77.1"
+  },
+  "devDependencies": {
+    "browserify": "^13.0.1",
+    "watchify": "^3.7.0"
+  },
+  "scripts": {
+    "build": "browserify src/main.js -o dist/bundle.js",
+    "watch": "watchify src/main.js -o dist/bundle.js -v"
   }
 }

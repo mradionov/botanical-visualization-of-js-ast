@@ -1,95 +1,102 @@
-/* global THREE */
-var MOD_SCENE = (function (tree) {
-  'use strict';
+'use strict';
 
-  //----------------------------------------------------------------------------
-  // Private
-  //----------------------------------------------------------------------------
+//----------------------------------------------------------------------------
+// Requirements
+//----------------------------------------------------------------------------
 
-  var stats, $node;
+var THREE = require('three');
 
-  var scene, camera, renderer;
+// OrbitControls is not optimized for CommonJS, it adds itself to THREE global,
+// and is available after that as "THREE.OrbitControls"
+window.THREE = THREE;
+require('three/examples/js/controls/OrbitControls');
 
-  var controls, raycaster, mouse;
+var Stats = require('stats.js');
 
-  var container = document.querySelector('[data-scene]');
+//----------------------------------------------------------------------------
+// Module
+//----------------------------------------------------------------------------
 
-  console.log(container);
+var stats, $node;
 
-  function init() {
+var scene, camera, renderer;
 
-    scene = new THREE.Scene();
+var controls, raycaster, mouse;
 
-    camera = new THREE.PerspectiveCamera(
-      75,
-      container.offsetWidth / container.offsetHeight,
-      1,
-      30000
-    );
-    camera.position.z = 1000;
-    camera.position.y = 700;
+var container = document.querySelector('[data-scene]');
 
-    renderer = new THREE.WebGLRenderer();
-    renderer.setSize(container.offsetWidth, container.offsetHeight);
-    container.appendChild(renderer.domElement);
+console.log(container);
 
-    controls = new THREE.OrbitControls(camera, renderer.domElement);
-    controls.enableZoom = true;
+function init() {
 
-    raycaster = new THREE.Raycaster();
-    mouse = new THREE.Vector2();
+  scene = new THREE.Scene();
 
-    stats = new Stats();
-    stats.domElement.className = 'stats'
-    document.body.appendChild(stats.domElement);
+  camera = new THREE.PerspectiveCamera(
+    75,
+    container.offsetWidth / container.offsetHeight,
+    1,
+    30000
+  );
+  camera.position.z = 1000;
+  camera.position.y = 700;
 
-    $node = document.createElement('pre');
-    document.body.appendChild($node);
+  renderer = new THREE.WebGLRenderer();
+  renderer.setSize(container.offsetWidth, container.offsetHeight);
+  container.appendChild(renderer.domElement);
 
-    window.addEventListener('click', onClick, false);
+  controls = new THREE.OrbitControls(camera, renderer.domElement);
+  controls.enableZoom = true;
 
-    animate();
+  raycaster = new THREE.Raycaster();
+  mouse = new THREE.Vector2();
 
-    return scene;
+  stats = new Stats();
+  stats.domElement.className = 'stats'
+  document.body.appendChild(stats.domElement);
+
+  $node = document.createElement('pre');
+  document.body.appendChild($node);
+
+  window.addEventListener('click', onClick, false);
+
+  animate();
+
+  return scene;
+}
+
+function animate() {
+
+  window.requestAnimationFrame(animate);
+
+  renderer.render(scene, camera);
+
+  stats.update();
+}
+
+function onClick(event) {
+  mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+  mouse.y = - (event.clientY / window.innerHeight) * 2 + 1;
+
+  raycaster.setFromCamera(mouse, camera);
+
+  var intersects = raycaster.intersectObject(scene, true);
+  if (!intersects.length) {
+    return;
   }
 
-  function animate() {
-
-    window.requestAnimationFrame(animate);
-
-    renderer.render(scene, camera);
-
-    stats.update();
-  }
-
-  function onClick(event) {
-    mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
-    mouse.y = - (event.clientY / window.innerHeight) * 2 + 1;
-
-    raycaster.setFromCamera(mouse, camera);
-
-    var intersects = raycaster.intersectObject(scene, true);
-    if (!intersects.length) {
-      return;
+  var node = intersects[0].object.custom.astNode;
+  var string = JSON.stringify(node, function (key, value) {
+    if (Array.isArray(value)) {
+      return '[...]';
     }
+    return value;
+  }, 2);
 
-    var node = intersects[0].object.custom.astNode;
-    var string = JSON.stringify(node, function (key, value) {
-      if (Array.isArray(value)) {
-        return '[...]';
-      }
-      return value;
-    }, 2);
+  $node.innerHTML = string;
+}
 
-    $node.innerHTML = string;
-  }
+//----------------------------------------------------------------------------
+// Public
+//----------------------------------------------------------------------------
 
-  //----------------------------------------------------------------------------
-  // Public
-  //----------------------------------------------------------------------------
-
-  return {
-    init: init
-  };
-
-}());
+module.exports = init;
