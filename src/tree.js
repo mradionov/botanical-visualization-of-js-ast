@@ -47,8 +47,8 @@ function toRad(deg) {
 // Private
 //----------------------------------------------------------------------------
 
-var loader = new THREE.TextureLoader();
-var texture = loader.load('images/texture.png');
+// var loader = new THREE.TextureLoader();
+// var texture = loader.load('images/texture.png');
 
 
 function draw(branchedNode, color) {
