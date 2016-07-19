@@ -27,7 +27,7 @@ var geometry = new THREE.CylinderGeometry(
   STEM_RADIUS,
   STEM_RADIUS,
   STEM_HEIGHT,
-  32
+  5
 );
 
 // Translate geometry itself within a mesh to create a virtual pivot
@@ -58,6 +58,8 @@ function draw(branchedNode, color) {
   if (!branchedNode) {
     return stem;
   }
+
+  stem.custom.valid = true;
 
   if (!branchedNode.isRoot) {
 
@@ -113,4 +115,34 @@ function createStem(branchedNode, color) {
   return mesh;
 }
 
-module.exports = draw;
+// Takes about 2 seconds and keeps 60 fps for 2k lines of code
+function optimizedDraw(astTransformed) {
+  var totalGeometry = new THREE.Geometry();
+
+  // Draw original tree
+  var tree = draw(astTransformed);
+
+  // Walk over each tree child node
+  tree.traverse(function(child) {
+    if (child.custom && child.custom.valid) {
+      // http://stackoverflow.com/questions/19559395/merging-an-entire-object3d-mesh-hierarchy-together
+      if (child.parent) {
+        child.updateMatrixWorld();
+        child.applyMatrix(child.parent.matrixWorld);
+      }
+
+      // Merge all geometries together to one keeping positions
+      totalGeometry.merge(child.geometry, child.matrix);
+    }
+  });
+
+  var totalMaterial = new THREE.MeshBasicMaterial({
+    color: 0x0000FF,
+    wireframe: true
+  });
+  var totalMesh = new THREE.Mesh(totalGeometry, totalMaterial);
+
+  return totalMesh;
+}
+
+module.exports = optimizedDraw;

@@ -25,8 +25,6 @@ var controls, raycaster, mouse;
 
 var container = document.querySelector('[data-scene]');
 
-console.log(container);
-
 function init() {
 
   scene = new THREE.Scene();
