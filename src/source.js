@@ -4,9 +4,8 @@
 // Module
 //------------------------------------------------------------------------------
 
-var $element = document.getElementById('source');
-var source = $element.innerHTML;
+var $element = document.querySelector('[data-source-input]');
 
 module.exports = function getSource() {
-  return source;
+  return $element.value;
 }

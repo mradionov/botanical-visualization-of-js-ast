@@ -18,13 +18,14 @@ pre {
 
 .sidebar {
   float: left;
-  width: 200px;
+  width: 380px;
   height: 100%;
+  padding: 0 10px;
 }
 
 .content {
   height: 100%;
-  margin-left: 200px;
+  margin-left: 400px;
 }
 
 .scene {
@@ -35,5 +36,12 @@ pre {
 .stats {
   position: 'absolute';
   top: 0;
-  left: 200px !important;
+  left: 400px !important;
+}
+
+.source-custom textarea {
+  width: 98%;
+  max-width: 98%;
+  min-height: 200px;
+  max-height: 200px;
 }

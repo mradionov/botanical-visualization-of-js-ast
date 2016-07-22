@@ -7,15 +7,18 @@
 </head>
 <body>
 
-  <div class="sidebar"></div>
+  <div class="sidebar">
+
+    <div class="source-custom">
+      <h2>Source code</h2>
+      <textarea data-source-input>var foo = 42;</textarea>
+    </div>
+
+  </div>
+
   <div class="content">
     <div class="scene" data-scene></div>
   </div>
-
-  <!-- Insert source code here -->
-  <script id="source" type="text/template">
-    1;
-  </script>
 
   <script src="bundle.js"></script>
 
