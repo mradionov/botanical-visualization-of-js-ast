@@ -27,7 +27,7 @@ var geometry = new THREE.CylinderGeometry(
   STEM_RADIUS,
   STEM_RADIUS,
   STEM_HEIGHT,
-  5
+  10
 );
 
 // Translate geometry itself within a mesh to create a virtual pivot
