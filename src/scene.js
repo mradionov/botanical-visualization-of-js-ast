@@ -17,11 +17,11 @@ var Stats = require('stats.js');
 // Module
 //----------------------------------------------------------------------------
 
-var stats, $node;
+var stats;
 
 var scene, camera, renderer;
 
-var controls, raycaster, mouse;
+var controls;
 
 var container = document.querySelector('[data-scene]');
 
@@ -45,17 +45,9 @@ function init() {
   controls = new THREE.OrbitControls(camera, renderer.domElement);
   controls.enableZoom = true;
 
-  raycaster = new THREE.Raycaster();
-  mouse = new THREE.Vector2();
-
   stats = new Stats();
   stats.domElement.className = 'stats'
   document.body.appendChild(stats.domElement);
-
-  $node = document.createElement('pre');
-  document.body.appendChild($node);
-
-  window.addEventListener('click', onClick, false);
 
   animate();
 
@@ -69,28 +61,6 @@ function animate() {
   renderer.render(scene, camera);
 
   stats.update();
-}
-
-function onClick(event) {
-  mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
-  mouse.y = - (event.clientY / window.innerHeight) * 2 + 1;
-
-  raycaster.setFromCamera(mouse, camera);
-
-  var intersects = raycaster.intersectObject(scene, true);
-  if (!intersects.length) {
-    return;
-  }
-
-  var node = intersects[0].object.custom.astNode;
-  var string = JSON.stringify(node, function (key, value) {
-    if (Array.isArray(value)) {
-      return '[...]';
-    }
-    return value;
-  }, 2);
-
-  $node.innerHTML = string;
 }
 
 //----------------------------------------------------------------------------
