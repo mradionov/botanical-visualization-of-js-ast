@@ -1,0 +1,26 @@
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  display: flex;
+  flex: 1;
+}
+
+canvas {
+  border: 1px solid #000;
+}
+
+.scene {
+  padding: 20px;
+}
+
+.side {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  padding: 20px;
+}
+
+textarea {
+  flex: 0.5;
+}

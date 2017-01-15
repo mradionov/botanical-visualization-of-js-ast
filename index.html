@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Botanical Visualization of JavaScript AST</title>
+  <link rel="stylesheet" type="text/css" href="style.css">
+</head>
+<body>
+
+  <div class="scene">
+    <canvas></canvas>
+  </div>
+  <div class="side">
+    <textarea>var foo = 42;</textarea>
+    <button onclick="ns.main();">Draw</button>
+  </div>
+
+  <!-- Vendor libs -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/esprima/2.7.3/esprima.min.js"></script>
+
+  <script>
+    // Create project namespace
+    window.ns = {};
+  </script>
+
+  <script src="src/config.js"></script>
+  <script src="src/Point.js"></script>
+  <script src="src/Figure.js"></script>
+  <script src="src/Rectangle.js"></script>
+  <script src="src/Scene.js"></script>
+  <script src="src/parse.js"></script>
+  <script src="src/main.js"></script>
+
+</body>
+</html>
