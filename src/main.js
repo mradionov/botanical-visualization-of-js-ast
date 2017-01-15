@@ -16,11 +16,10 @@
     stem.scale(scale);
     stem.translate(mount.x - stem.getWidth() * scale / 2, mount.y);
     stem.rotate(angle, mount);
-
     return stem;
   }
 
-  function createStems(node, stems = [], stemParams) {
+  function createStems(node, stems = [], stemParams = { scale: 1 }) {
     const stem = createStem(stemParams);
 
     if (node.children.length === 0) {
@@ -47,12 +46,12 @@
     stems.push(stem);
 
     createStems(branch1, stems, {
-      scale: scale1,
+      scale: stemParams.scale * scale1,
       mount: stem.getTopCenter(),
       angle: config.TILT * weightRatio1,
     });
     createStems(branch2, stems, {
-      scale: scale2,
+      scale: stemParams.scale * scale2,
       mount: stem.getTopCenter(),
       angle: - config.TILT * weightRatio2,
     });
