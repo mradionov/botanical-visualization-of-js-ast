@@ -48,12 +48,12 @@
     createStems(branch1, stems, {
       scale: stemParams.scale * scale1,
       mount: stem.getTopCenter(),
-      angle: config.TILT * weightRatio1,
+      angle: config.TILT * weightRatio2,
     });
     createStems(branch2, stems, {
       scale: stemParams.scale * scale2,
       mount: stem.getTopCenter(),
-      angle: - config.TILT * weightRatio2,
+      angle: - config.TILT * weightRatio1,
     });
 
     return stems;
