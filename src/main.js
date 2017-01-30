@@ -14,12 +14,12 @@
   } = {}) {
     const stem = new Rectangle(0, 0, config.STEM_WIDTH, config.STEM_HEIGHT);
     stem.scale(scale);
-    stem.translate(mount.x - stem.getWidth() * scale / 2, mount.y);
+    stem.translate(mount.x - stem.getWidth() / 2, mount.y);
     stem.rotate(angle, mount);
     return stem;
   }
 
-  function createStems(node, stems = [], stemParams = { scale: 1 }) {
+  function createStems(node, stems = [], stemParams = { scale: 1, angle: 0 }) {
     const stem = createStem(stemParams);
 
     if (node.children.length === 0) {
@@ -48,12 +48,12 @@
     createStems(branch1, stems, {
       scale: stemParams.scale * scale1,
       mount: stem.getTopCenter(),
-      angle: config.TILT * weightRatio2,
+      angle: config.TILT * weightRatio2 + stemParams.angle,
     });
     createStems(branch2, stems, {
       scale: stemParams.scale * scale2,
       mount: stem.getTopCenter(),
-      angle: - config.TILT * weightRatio1,
+      angle: - config.TILT * weightRatio1 + stemParams.angle,
     });
 
     return stems;
@@ -88,7 +88,7 @@
     console.time('draw');
     stems.forEach((stem) => {
       const translatedStem = stem.translate(400);
-      scene.drawFigure(stem, { stroke: '#000', fill: null });
+      scene.drawFigure(stem);
     });
     console.timeEnd('draw');
 
