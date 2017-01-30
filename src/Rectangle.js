@@ -16,6 +16,15 @@
       this.height = height;
     }
 
+    scale(value) {
+      this.width *= value;
+      this.height *= value;
+
+      super.scale(value);
+
+      return this;
+    }
+
     getTopLeft() {
       return this.getPoint(1);
     }
