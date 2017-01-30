@@ -25,12 +25,28 @@
       return this;
     }
 
+    getBottomLeft() {
+      return this.getPoint(0);
+    }
+
     getTopLeft() {
       return this.getPoint(1);
     }
 
     getTopRight() {
       return this.getPoint(2);
+    }
+
+    getBottomRight() {
+      return this.getPoint(3);
+    }
+
+    setBottomLeft(point) {
+      return this.setPoint(0, point);
+    }
+
+    setBottomRight(point) {
+      return this.setPoint(3, point);
     }
 
     getWidth() {

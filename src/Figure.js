@@ -20,6 +20,12 @@
       return this.points[index];
     }
 
+    setPoint(index, point) {
+      this.points[index] = point;
+
+      return this;
+    }
+
     getMinX() {
       const xs = this.points.map(p => p.x);
       return Math.min(...xs);
