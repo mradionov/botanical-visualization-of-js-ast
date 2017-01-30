@@ -86,8 +86,18 @@
     console.timeEnd('stem');
 
     console.time('draw');
+
+    const maxY = Math.max(...stems.map(s => s.getMaxY()));
+
+    let scale = 1;
+    if (maxY > scene.getHeight()) {
+      scale = scene.getHeight() / maxY;
+    }
+
+    scene.scale(scale);
+
     stems.forEach((stem) => {
-      const translatedStem = stem.translate(400);
+      const translatedStem = stem.translate(scene.getScaledWidth() / 2);
       scene.drawFigure(stem);
     });
     console.timeEnd('draw');
