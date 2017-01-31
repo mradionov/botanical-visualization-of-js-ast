@@ -31,6 +31,10 @@
 
     const branch1 = node.children.shift(); // d1
     node.weight -= branch1.weight;
+    if (node.side === undefined) {
+      node.side = 1;
+    }
+    node.side = node.side == 1 ? 0 : 1;
 
     const branch2 = node;
 
@@ -45,15 +49,18 @@
 
     stems.push(stem);
 
+    const m1 = node.side === 0 ? 1 : -1;
+    const m2 = node.side === 0 ? -1 : 1;
+
     createStems(branch1, stems, {
       scale: stemParams.scale * scale1,
       mount: stem.getTopCenter(),
-      angle: config.TILT * weightRatio2 + stemParams.angle,
+      angle: m1 * config.TILT * weightRatio2 + stemParams.angle,
     });
     createStems(branch2, stems, {
       scale: stemParams.scale * scale2,
       mount: stem.getTopCenter(),
-      angle: - config.TILT * weightRatio1 + stemParams.angle,
+      angle: m2 * config.TILT * weightRatio1 + stemParams.angle,
     });
 
     return stems;

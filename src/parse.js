@@ -109,23 +109,29 @@
       throw new Error('Unknown AST node type: %s', astNode.type);
     }
 
-    let i = props.length;
-    while ((i -= 1) >= 0) {
+    for (let i = 0; i < props.length; i++) {
       const children = astNode[props[i]];
       if (isArray(children)) {
-        let j = children.length;
-        while ((j -= 1) >= 0) {
+        for (let j = 0; j < children.length; j++) {
           if (isNode(children[j])) {
-            weightNode.children.push(createWeightTree(children[j]));
+            weightNode.children.push(createWeightTree(children[j], j));
           }
         }
       } else if (isNode(children)) {
-        weightNode.children.push(createWeightTree(children));
+        weightNode.children.push(createWeightTree(children, i));
       }
     }
 
-    let k = weightNode.children.length;
-    while ((k -= 1) >= 0) {
+    const weights = [];
+    weightNode.children = weightNode.children.filter((child) => {
+      if (weights.indexOf(child.weight) === -1) {
+        weights.push(child.weight);
+        return true;
+      }
+      return false;
+    });
+
+    for (let k = 0; k < weightNode.children.length; k++) {
       weightNode.weight += weightNode.children[k].weight;
     }
 
