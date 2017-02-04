@@ -1,9 +1,14 @@
 (function () {
 
-  const { config, parse, Scene, Figure, Rectangle, Point } = window.ns;
+  const {
+    utils, config, settings, parse,
+    Scene, Figure, Rectangle, Point
+  } = window.ns;
 
-  const scene = new Scene();
+  const scene = new Scene('.scene');
   const textarea = document.querySelector('textarea');
+
+  settings.registerToggle('#settings-randomize-branch', 'randomize');
 
   const GOLDEN_RATIO = (1 + Math.sqrt(5)) / 2;
 
@@ -31,10 +36,15 @@
 
     const branch1 = node.children.shift(); // d1
     node.weight -= branch1.weight;
-    if (node.side === undefined) {
-      node.side = 1;
+
+    if (settings.get('randomize')) {
+      node.side = utils.random(0, 1);
+    } else {
+      if (node.side === undefined) {
+        node.side = 1;
+      }
+      node.side = node.side == 1 ? 0 : 1;
     }
-    node.side = node.side == 1 ? 0 : 1;
 
     const branch2 = node;
 
@@ -77,6 +87,7 @@
   function main() {
     const source = textarea.value.trim();
     save(source);
+    settings.save();
 
     scene.clear();
     console.log('-----------------------------------');
@@ -134,6 +145,7 @@
   }
 
   textarea.value = load();
+  settings.load();
   main();
 
   Object.assign(window.ns, {

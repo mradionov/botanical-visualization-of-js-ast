@@ -1,19 +1,35 @@
 (function () {
 
+  const { utils } = window.ns;
+
   class Scene {
 
-    constructor(selector = 'canvas', options = { width: 800, height: 640 }) {
-      this.width = options.width;
-      this.height = options.height;
+    constructor(containerSelector) {
+      this.container = document.querySelector(containerSelector);
 
-      this.canvas = document.querySelector(selector);
+      this.canvas = document.createElement('canvas');
+      this.container.appendChild(this.canvas);
 
-      this.canvas.width = this.width;
-      this.canvas.height = this.height;
+      this.resize();
 
       this.scaleValue = 1;
 
       this.context = this.canvas.getContext('2d');
+
+      window.addEventListener('resize', utils.debounce(() => {
+        this.resize();
+      }, 300));
+    }
+
+    resize() {
+      this.canvas.width = 0;
+      this.canvas.height = 0;
+
+      this.width = this.container.clientWidth;
+      this.height = this.container.clientHeight;
+
+      this.canvas.width = this.width;
+      this.canvas.height = this.height;
     }
 
     getWidth() {
@@ -44,7 +60,7 @@
     drawFigure(figure, options = { fill: '#000', stroke: null }) {
       const points = figure.getPoints().slice();
 
-      // CLose the figure, if it is not the line
+      // Close the figure, if it is not the line
       if (points.length > 2) {
         const firstPoint = points[0];
         points.push(firstPoint);

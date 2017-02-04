@@ -8,11 +8,23 @@
 <body>
 
   <div class="scene">
-    <canvas></canvas>
+    <!-- Canvas element will be inserted -->
   </div>
   <div class="side">
-    <textarea>var foo = 42;</textarea>
-    <button onclick="ns.main();">Draw</button>
+    <div class="source">
+      <textarea>var foo = 42;</textarea>
+    </div>
+    <div class="actions">
+      <button onclick="ns.main();">Draw</button>
+    </div>
+    <div class="settings">
+      <div class="setting">
+        <input type="checkbox" id="settings-randomize-branch" />
+        <label for="settings-randomize-branch">
+          Randomize branch direction
+        </label>
+      </div>
+    </div>
   </div>
 
   <!-- Vendor libs -->
@@ -23,7 +35,9 @@
     window.ns = {};
   </script>
 
+  <script src="src/utils.js"></script>
   <script src="src/config.js"></script>
+  <script src="src/settings.js"></script>
   <script src="src/Point.js"></script>
   <script src="src/Figure.js"></script>
   <script src="src/Rectangle.js"></script>
