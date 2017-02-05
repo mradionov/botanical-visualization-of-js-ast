@@ -84,15 +84,9 @@
     return typeof node === 'object' && typeof node.type === 'string';
   }
 
-  function isProperty(nodeType, key) {
-    return (nodeType === 'ObjectExpression' || nodeType === 'ObjectPattern') && key === 'properties';
-  }
-
-  function transformNode(astNode, options = { orphan: false }) {
-    const weightNode = {
-      astNode,
+  function transformNode(astNode) {
+    const generalNode = {
       children: [],
-      weight: 2,
     };
 
     const props = NODE_PROPERTIES[astNode.type];
@@ -105,38 +99,19 @@
       if (isArray(children)) {
         for (let j = 0; j < children.length; j++) {
           if (isNode(children[j])) {
-            weightNode.children.push(transformNode(children[j], options));
+            generalNode.children.push(transformNode(children[j]));
           }
         }
       } else if (isNode(children)) {
-        weightNode.children.push(transformNode(children, options));
+        generalNode.children.push(transformNode(children));
       }
     }
 
-    if (options.orphan) {
-      const weights = [];
-      weightNode.children = weightNode.children.filter((child) => {
-        if (weights.indexOf(child.weight) === -1) {
-          weights.push(child.weight);
-          return true;
-        }
-        return false;
-      });
-    }
-
-    for (let k = 0; k < weightNode.children.length; k++) {
-      weightNode.weight += weightNode.children[k].weight;
-    }
-
-    weightNode.children.sort((a, b) => {
-      return b.weight - a.weight;
-    });
-
-    return weightNode;
+    return generalNode;
   }
 
-  function astToGeneral(ast, options = { orphan: false }) {
-    return transformNode(ast, options);
+  function astToGeneral(astTree) {
+    return transformNode(astTree);
   }
 
   window.ns.transform.astToGeneral = astToGeneral;

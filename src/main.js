@@ -1,7 +1,7 @@
 (function () {
 
   const {
-    settings,
+    config, settings,
     source, parse, transform, draw,
     Scene, Figure, Point
   } = window.ns;
@@ -16,6 +16,16 @@
     scene.clear();
     console.log('-----------------------------------');
     console.log('-----------------------------------');
+    const options = {
+      height: config.STEM_HEIGHT,
+      width: config.STEM_WIDTH,
+      tilt: config.TILT,
+
+      random: settings.get('random'),
+      orphan: settings.get('orphan'),
+    };
+    console.log(options);
+    console.log('-----------------------------------');
 
     console.time('source');
     const text = source.get();
@@ -26,15 +36,11 @@
     console.timeEnd('parse');
 
     console.time('transform');
-    const tree = transform(ast, {
-      orphan: settings.get('orphan'),
-    });
+    const tree = transform(ast, options);
     console.timeEnd('transform');
 
     console.time('draw');
-    const stems = draw(tree, {
-      random: settings.get('random'),
-    });
+    const stems = draw(tree, options);
     console.timeEnd('draw');
 
     console.time('render');
