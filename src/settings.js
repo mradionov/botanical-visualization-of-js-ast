@@ -13,6 +13,8 @@
 
     set(name, value) {
       const element = this.settings[name];
+      if (!element) return;
+
       element.checked = value;
     }
 
@@ -36,7 +38,6 @@
       const settings = JSON.parse(json);
       Object.keys(settings).forEach((name) => {
         const value = settings[name];
-        console.log(value);
         this.set(name, value);
       });
     }
@@ -45,6 +46,9 @@
 
 
   const settings = new Settings();
+
+  settings.registerToggle('#settings-randomize-branch', 'random');
+  settings.registerToggle('#settings-remove-same-children', 'orphan');
 
   Object.assign(window.ns, {
     settings,

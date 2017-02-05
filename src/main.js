@@ -1,109 +1,43 @@
 (function () {
 
   const {
-    utils, config, settings, parse,
-    Scene, Figure, Rectangle, Point
+    settings,
+    source, parse, transform, draw,
+    Scene, Figure, Point
   } = window.ns;
 
   const scene = new Scene('.scene');
-  const textarea = document.querySelector('textarea');
-
-  settings.registerToggle('#settings-randomize-branch', 'randomize');
-
-  const GOLDEN_RATIO = (1 + Math.sqrt(5)) / 2;
-
-  function createStem({
-    scale = 1,
-    mount = new Point(0, 0),
-    angle = 0,
-  } = {}) {
-    const stem = new Rectangle(0, 0, config.STEM_WIDTH, config.STEM_HEIGHT);
-    stem.scale(scale);
-    stem.translate(mount.x - stem.getWidth() / 2, mount.y);
-    stem.rotate(angle, mount);
-    return stem;
-  }
-
-  function createStems(node, stems = [], stemParams = { scale: 1, angle: 0 }) {
-    const stem = createStem(stemParams);
-
-    if (node.children.length === 0) {
-      stems.push(stem);
-      return stems;
-    }
-
-    const weight = node.weight; // s
-
-    const branch1 = node.children.shift(); // d1
-    node.weight -= branch1.weight;
-
-    if (settings.get('randomize')) {
-      node.side = utils.random(0, 1);
-    } else {
-      if (node.side === undefined) {
-        node.side = 1;
-      }
-      node.side = node.side == 1 ? 0 : 1;
-    }
-
-    const branch2 = node;
-
-    const weight1 = branch1.weight; // s1
-    const weight2 = branch2.weight; // s2
-
-    const weightRatio1 = weight1 / weight;
-    const weightRatio2 = weight2 / weight;
-
-    const scale1 = Math.sqrt(weightRatio1); // r1
-    const scale2 = Math.sqrt(weightRatio2); // r2
-
-    stems.push(stem);
-
-    const m1 = node.side === 0 ? 1 : -1;
-    const m2 = node.side === 0 ? -1 : 1;
-
-    createStems(branch1, stems, {
-      scale: stemParams.scale * scale1,
-      mount: stem.getTopCenter(),
-      angle: m1 * config.TILT * weightRatio2 + stemParams.angle,
-    });
-    createStems(branch2, stems, {
-      scale: stemParams.scale * scale2,
-      mount: stem.getTopCenter(),
-      angle: m2 * config.TILT * weightRatio1 + stemParams.angle,
-    });
-
-    return stems;
-  }
-
-  function save(source) {
-    window.localStorage.setItem('source', source);
-  }
-
-  function load() {
-    return window.localStorage.getItem('source') || 'var foo = 42;';
-  }
 
   function main() {
-    const source = textarea.value.trim();
-    save(source);
+
+    source.save();
     settings.save();
 
     scene.clear();
     console.log('-----------------------------------');
     console.log('-----------------------------------');
 
+    console.time('source');
+    const text = source.get();
+    console.timeEnd('source');
+
     console.time('parse');
-    const tree = parse(source);
-    console.log({ tree });
+    const ast = parse(text);
     console.timeEnd('parse');
 
-    console.time('stem');
-    const stems = createStems(tree);
-    console.log({ stems });
-    console.timeEnd('stem');
+    console.time('transform');
+    const tree = transform(ast, {
+      orphan: settings.get('orphan'),
+    });
+    console.timeEnd('transform');
 
     console.time('draw');
+    const stems = draw(tree, {
+      random: settings.get('random'),
+    });
+    console.timeEnd('draw');
+
+    console.time('render');
 
     // Branches might go under the root because they are too deep
     // So move the whole tree up and prolong the root
@@ -140,11 +74,11 @@
 
       scene.drawFigure(stem);
     });
-    console.timeEnd('draw');
+    console.timeEnd('render');
 
   }
 
-  textarea.value = load();
+  source.load();
   settings.load();
   main();
 
