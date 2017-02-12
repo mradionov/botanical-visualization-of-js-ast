@@ -11,7 +11,6 @@
   function main() {
 
     source.save();
-    settings.save();
 
     scene.clear();
     console.log('-----------------------------------');
@@ -21,7 +20,7 @@
       width: config.STEM_WIDTH,
       tilt: config.TILT,
 
-      random: settings.get('random'),
+      direction: settings.get('direction'),
       orphan: settings.get('orphan'),
     };
     console.log(options);
@@ -85,7 +84,6 @@
   }
 
   source.load();
-  settings.load();
   main();
 
   Object.assign(window.ns, {

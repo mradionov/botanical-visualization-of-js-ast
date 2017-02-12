@@ -43,5 +43,20 @@ canvas {
 }
 
 .setting {
-  margin-top: 5px;
+  margin-top: 10px;
+}
+
+.setting .title {
+  margin-bottom: 5px;
+}
+
+input[type="radio"],
+input[type="checkbox"] {
+  margin-left: 0;
+  margin-right: 0;
+}
+
+label {
+  margin-right: 5px;
+  vertical-align: top;
 }

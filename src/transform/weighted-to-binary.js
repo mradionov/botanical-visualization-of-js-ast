@@ -1,11 +1,11 @@
 (function () {
 
-  const { utils } = window.ns;
+  const { constants, utils } = window.ns;
 
   function transformNode(
     weightedNode,
     options = {
-      random: false,
+      direction: constants.DIRECTION_RANDOM,
       tilt: 90,
     },
     params = {
@@ -32,15 +32,22 @@
     const branch1 = weightedNode.children.shift(); // d1
     weightedNode.weight -= branch1.weight;
 
-    // TODO: refactor
-    if (options.random) {
-      weightedNode.side = utils.random(0, 1);
-    } else {
-      if (weightedNode.side === undefined) {
-        weightedNode.side = 1;
-      }
-      weightedNode.side = weightedNode.side == 1 ? 0 : 1;
+    // Direciton right by default
+    let direction = 1;
+    if (options.direction === constants.DIRECTION_LEFT) {
+      direction = -1;
+    } else if (options.direction === constants.DIRECTION_RANDOM) {
+      direction = utils.random(0, 1) === 0 ? 1 : -1;
+    } else if (options.direction === constants.DIRECTION_ALTERNATE) {
+      // Leading branch is used in a lot of pairs so this value will be available
+      // for all children which have that same branch. Value of the "side" will
+      // be switched by reference any time this branch is used.
+      weightedNode.side = weightedNode.side == 0 ? 1 : 0;
+      direction = weightedNode.side === 0 ? 1 : -1;
     }
+
+    const direction1 = direction;
+    const direction2 = -direction;
 
     const branch2 = weightedNode; // d2
 
@@ -52,9 +59,6 @@
 
     const scale1 = Math.sqrt(weightRatio1); // r1
     const scale2 = Math.sqrt(weightRatio2); // r2
-
-    const direction1 = weightedNode.side === 0 ? 1 : -1;
-    const direction2 = weightedNode.side === 0 ? -1 : 1;
 
     binaryNode.branch1 = transformNode(branch1, options, {
       angle: direction1 * options.tilt * weightRatio2 + params.angle,

@@ -18,19 +18,52 @@
       <button onclick="ns.main();">Draw</button>
     </div>
     <div class="settings">
-      <div class="setting">
-        <input type="checkbox" id="settings-randomize-branch" />
-        <label for="settings-randomize-branch">
-          Randomize branch direction
-        </label>
+      <form id="settings">
+        <div class="setting">
+          <div class="title">Leading branch direction:</div>
+          <input
+            checked
+            id="settings-branch-direction-random"
+            name="settings-branch-direction"
+            type="radio"
+            value="random"
+          />
+          <label for="settings-branch-direction-random">Random</label>
+          <input
+            id="settings-branch-direction-alternate"
+            name="settings-branch-direction"
+            type="radio"
+            value="alternate"
+          />
+          <label for="settings-branch-direction-alternate">Alternate</label>
+          <input
+            id="settings-branch-direction-right"
+            name="settings-branch-direction"
+            type="radio"
+            value="right"
+          />
+          <label for="settings-branch-direction-right">Only right</label>
+          <input
+            id="settings-branch-direction-left"
+            name="settings-branch-direction"
+            type="radio"
+            value="left"
+          />
+          <label for="settings-branch-direction-left">Only left</label>
+        </div>
+        <div class="setting">
+          <input
+            id="settings-remove-same-children"
+            name="settings-remove-same-children"
+            type="checkbox"
+            checked
+          />
+          <label for="settings-remove-same-children">
+            Remove similar child nodes
+          </label>
+        </div>
       </div>
-      <div class="setting">
-        <input type="checkbox" id="settings-remove-same-children" checked />
-        <label for="settings-remove-same-children">
-          Remove similar child nodes
-        </label>
-      </div>
-    </div>
+    </form>
   </div>
 
   <!-- Vendor libs -->
@@ -42,6 +75,7 @@
   </script>
 
   <script src="src/utils.js"></script>
+  <script src="src/constants.js"></script>
   <script src="src/config.js"></script>
   <script src="src/settings.js"></script>
 

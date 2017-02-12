@@ -1,54 +1,24 @@
 (function () {
+  // TODO: save settings in local storage or URL
 
-  class Settings {
+  const form = document.querySelector('#settings');
 
-    constructor() {
-      this.settings = {};
-    }
+  // Map internal setting name to HTML form name
+  const map = {
+    direction: 'settings-branch-direction',
+    orphan: 'settings-remove-same-children',
+  };
 
-    get(name) {
-      const element = this.settings[name];
-      return element.checked;
-    }
-
-    set(name, value) {
-      const element = this.settings[name];
-      if (!element) return;
-
-      element.checked = value;
-    }
-
-    registerToggle(selector, name) {
-      const element = document.querySelector(selector);
-      this.settings[name] = element;
-    }
-
-    save() {
-      const settings = {};
-      Object.keys(this.settings).forEach((name) => {
-        const value = this.get(name);
-        settings[name] = value;
-      });
-      const json = JSON.stringify(settings);
-      window.localStorage.setItem('settings', json);
-    }
-
-    load() {
-      const json = window.localStorage.getItem('settings') || '{}';
-      const settings = JSON.parse(json);
-      Object.keys(settings).forEach((name) => {
-        const value = settings[name];
-        this.set(name, value);
-      });
-    }
-
+  function get(name) {
+    const data = new FormData(form);
+    const formName = map[name];
+    const value = data.get(formName);
+    return value;
   }
 
-
-  const settings = new Settings();
-
-  settings.registerToggle('#settings-randomize-branch', 'random');
-  settings.registerToggle('#settings-remove-same-children', 'orphan');
+  const settings = {
+    get,
+  };
 
   Object.assign(window.ns, {
     settings,
