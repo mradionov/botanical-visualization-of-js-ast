@@ -36,25 +36,8 @@
       return this.width;
     }
 
-    getScaledWidth() {
-      return this.width / this.scaleValue;
-    }
-
     getHeight() {
       return this.height;
-    }
-
-    getScaledHeight() {
-      return this.height / this.scaleValue;
-    }
-
-    scale(value) {
-      this.scaleValue = value;
-      // Reset all transformations
-      this.context.setTransform(1, 0, 0, 1, 0, 0);
-      this.context.scale(value, value);
-
-      return this;
     }
 
     drawFigure(figure, options = { fill: '#000', stroke: null }) {
@@ -70,7 +53,7 @@
 
       points.forEach((point) => {
         // Invert Y axis to start drawing from bottom left corner
-        this.context.lineTo(point.x, this.getScaledHeight() - point.y);
+        this.context.lineTo(point.x, this.getHeight() - point.y);
       });
 
       if (options.stroke) {
@@ -85,7 +68,7 @@
     }
 
     clear() {
-      this.context.clearRect(0, 0, this.getScaledWidth(), this.getScaledHeight());
+      this.context.clearRect(0, 0, this.getWidth(), this.getHeight());
     }
 
   }

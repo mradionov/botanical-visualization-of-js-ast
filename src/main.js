@@ -14,7 +14,6 @@
 
     scene.clear();
     console.log('-----------------------------------');
-    console.log('-----------------------------------');
     const options = {
       height: config.STEM_HEIGHT,
       width: config.STEM_WIDTH,
@@ -24,7 +23,6 @@
       orphan: settings.get('orphan'),
     };
     console.log(options);
-    console.log('-----------------------------------');
 
     console.time('source');
     const text = source.get();
@@ -39,48 +37,31 @@
     console.timeEnd('transform');
 
     console.time('draw');
-    const stems = draw(tree, options);
+    const model = draw(tree, options);
     console.timeEnd('draw');
 
     console.time('render');
 
     // Branches might go under the root because they are too deep
     // So move the whole tree up and prolong the root
-    const minY = Math.min(...stems.map(s => s.getMinY()));
-    if (minY < 0) {
-      stems.forEach((stem) => {
-        stem.translate(0, Math.abs(minY));
-      });
+    if (model.bottom < 0) {
+      model.translate(0, Math.abs(model.bottom));
+      const root = model.nodes[0];
+      root.setBottomLeft(new Point(root.getBottomLeft().x, 0));
+      root.setBottomRight(new Point(root.getBottomRight().x, 0));
     }
 
-    const root = stems[0];
-
-    root.setBottomLeft(new Point(root.getBottomLeft().x, 0));
-    root.setBottomRight(new Point(root.getBottomRight().x, 0));
-
-    // Check if the tree is to big for the scene and make it fit
-    // by scaling the scene
-    const maxX = Math.max(...stems.map(s => s.getMaxX()));
-    const maxY = Math.max(...stems.map(s => s.getMaxY()));
-
-    const sceneWidth = scene.getWidth() / 2;
+    // Check if the tree is to big for the scene, make it fit
+    const sceneWidth = scene.getWidth();
     const sceneHeight = scene.getHeight();
+    model.fit(sceneWidth, sceneHeight);
 
-    const scaleX = maxX > sceneWidth ? (sceneWidth / maxX) : 1;
-    const scaleY = maxY > sceneHeight ? (sceneHeight / maxY) : 1;
+    // Horizontally center the tree
+    model.translate(scene.getWidth() / 2);
 
-    const scale = Math.min(scaleX, scaleY);
+    model.nodes.forEach(node => scene.drawFigure(node));
 
-    scene.scale(scale);
-
-    stems.forEach((stem) => {
-      // Center the tree
-      stem.translate(scene.getScaledWidth() / 2);
-
-      scene.drawFigure(stem);
-    });
     console.timeEnd('render');
-
   }
 
   source.load();
