@@ -1,7 +1,7 @@
 (function () {
 
   const {
-    config, settings,
+    config, settings, status,
     source, parse, transform, draw,
     Scene, Figure, Point
   } = window.ns;
@@ -21,25 +21,31 @@
 
       direction: settings.get('direction'),
       orphan: settings.get('orphan'),
+      leaves: settings.get('leaves'),
     };
     console.log(options);
 
     console.time('source');
+    status.progress('Retrieving source');
     const text = source.get();
     console.timeEnd('source');
 
     console.time('parse');
+    status.progress('Parsing');
     const ast = parse(text);
     console.timeEnd('parse');
 
     console.time('transform');
+    status.progress('Transforming');
     const tree = transform(ast, options);
     console.timeEnd('transform');
 
     console.time('draw');
+    status.progress('Drawing');
     const model = draw(tree, options);
     console.timeEnd('draw');
 
+    status.progress('Drawing');
     console.time('render');
 
     // Branches might go under the root because they are too deep
@@ -59,8 +65,15 @@
     // Horizontally center the tree
     model.translate(scene.getWidth() / 2);
 
-    model.nodes.forEach(node => scene.drawFigure(node));
+    model.nodes.forEach(node => {
+      if (options.leaves && node.isLeaf) {
+        scene.drawFigure(node, { fill: '#9EB63A' });
+      } else {
+        scene.drawFigure(node, { fill: '#9B9188' })
+      }
+    });
 
+    status.clear();
     console.timeEnd('render');
   }
 

@@ -1,6 +1,6 @@
 (function () {
 
-  const { Rectangle, Point } = window.ns;
+  const { Figure, Rectangle, Point } = window.ns;
 
   class Tree {
 
@@ -18,7 +18,13 @@
     }
 
     addNode(node, options, mount) {
-      const figure = this.createNodeModel(node, options, mount);
+      let figure;
+
+      if (options.leaves && node.isLeaf) {
+        figure = this.createLeafModel(node, mount);
+      } else {
+        figure = this.createNodeModel(node, options, mount);
+      }
 
       this.top = Math.max(this.top, figure.getMaxY());
       this.right = Math.max(this.right, figure.getMaxX());
@@ -28,6 +34,7 @@
       this.height = this.top - this.bottom;
 
       if (node.isLeaf) {
+        figure.isLeaf = true;
         this.nodes.push(figure);
         return this;
       }
@@ -42,6 +49,19 @@
       const figure = new Rectangle(0, 0, options.width, options.height);
       figure.scale(node.scale);
       figure.translate(mount.x - figure.getWidth() / 2, mount.y);
+      figure.rotate(node.angle, mount);
+      return figure;
+    }
+
+    createLeafModel(node, mount = new Point(0, 0)) {
+      const mult = 3;
+      const figure = new Figure(
+        new Point(0, 0),
+        new Point(1 * mult, 2 * mult),
+        new Point(5 * mult, 0),
+        new Point(1 * mult, -2 * mult)
+      );
+      figure.translate(mount.x, mount.y);
       figure.rotate(node.angle, mount);
       return figure;
     }

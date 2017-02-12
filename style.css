@@ -4,15 +4,35 @@ html, body {
   height: 100%;
   display: flex;
   flex: 1;
+  flex-direction: column;
 }
 
-canvas {
-  border: 1px solid #000;
+.header {
+  padding-left: 20px;
+}
+
+.content {
+  display: flex;
+  flex: 1;
+  flex-direction: row;
 }
 
 .scene {
+  position: relative;
   flex: 2;
   margin: 20px;
+}
+
+.status {
+  position: absolute;
+  top: 0;
+  right: 0;
+  left: 0;
+  padding: 5px;
+}
+
+canvas {
+  border-bottom: 1px solid #e8e8e8;
 }
 
 .side {

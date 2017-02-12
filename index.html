@@ -6,64 +6,78 @@
   <link rel="stylesheet" type="text/css" href="style.css">
 </head>
 <body>
-
-  <div class="scene">
-    <!-- Canvas element will be inserted -->
-  </div>
-  <div class="side">
-    <div class="source">
-      <textarea>var foo = 42;</textarea>
+  <div class="header"></div>
+  <div class="content">
+    <div class="scene">
+      <div class="status"></div>
+      <!-- Canvas element will be inserted -->
     </div>
-    <div class="actions">
-      <button onclick="ns.main();">Draw</button>
-    </div>
-    <div class="settings">
-      <form id="settings">
-        <div class="setting">
-          <div class="title">Leading branch direction:</div>
-          <input
-            checked
-            id="settings-branch-direction-random"
-            name="settings-branch-direction"
-            type="radio"
-            value="random"
-          />
-          <label for="settings-branch-direction-random">Random</label>
-          <input
-            id="settings-branch-direction-alternate"
-            name="settings-branch-direction"
-            type="radio"
-            value="alternate"
-          />
-          <label for="settings-branch-direction-alternate">Alternate</label>
-          <input
-            id="settings-branch-direction-right"
-            name="settings-branch-direction"
-            type="radio"
-            value="right"
-          />
-          <label for="settings-branch-direction-right">Only right</label>
-          <input
-            id="settings-branch-direction-left"
-            name="settings-branch-direction"
-            type="radio"
-            value="left"
-          />
-          <label for="settings-branch-direction-left">Only left</label>
-        </div>
-        <div class="setting">
-          <input
-            id="settings-remove-same-children"
-            name="settings-remove-same-children"
-            type="checkbox"
-            checked
-          />
-          <label for="settings-remove-same-children">
-            Remove similar child nodes
-          </label>
-        </div>
+    <div class="side">
+      <div class="source">
+        <textarea>var foo = 42;</textarea>
       </div>
-    </form>
+      <div class="actions">
+        <button onclick="ns.main();">Draw</button>
+      </div>
+      <div class="settings">
+        <form id="settings">
+          <div class="setting">
+            <div class="title">Leading branch direction:</div>
+            <input
+              checked
+              id="settings-branch-direction-random"
+              name="settings-branch-direction"
+              type="radio"
+              value="random"
+            />
+            <label for="settings-branch-direction-random">Random</label>
+            <input
+              id="settings-branch-direction-alternate"
+              name="settings-branch-direction"
+              type="radio"
+              value="alternate"
+            />
+            <label for="settings-branch-direction-alternate">Alternate</label>
+            <input
+              id="settings-branch-direction-right"
+              name="settings-branch-direction"
+              type="radio"
+              value="right"
+            />
+            <label for="settings-branch-direction-right">Only right</label>
+            <input
+              id="settings-branch-direction-left"
+              name="settings-branch-direction"
+              type="radio"
+              value="left"
+            />
+            <label for="settings-branch-direction-left">Only left</label>
+          </div>
+          <div class="setting">
+            <input
+              id="settings-remove-same-children"
+              name="settings-remove-same-children"
+              type="checkbox"
+              checked
+            />
+            <label for="settings-remove-same-children">
+              Remove similar child nodes
+            </label>
+          </div>
+          <div class="setting">
+            <input
+              id="settings-show-leaves"
+              name="settings-show-leaves"
+              type="checkbox"
+              checked
+            />
+            <label for="settings-show-leaves">
+              Display leaves
+            </label>
+          </div>
+        </form>
+      </div>
+    </div>
   </div>
 
   <!-- Vendor libs -->
@@ -78,6 +92,7 @@
   <script src="src/constants.js"></script>
   <script src="src/config.js"></script>
   <script src="src/settings.js"></script>
+  <script src="src/status.js"></script>
 
   <script src="src/Point.js"></script>
   <script src="src/Figure.js"></script>

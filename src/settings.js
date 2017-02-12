@@ -7,6 +7,7 @@
   const map = {
     direction: 'settings-branch-direction',
     orphan: 'settings-remove-same-children',
+    leaves: 'settings-show-leaves',
   };
 
   function get(name) {
