@@ -1,6 +1,9 @@
 (function () {
 
-  const { Figure, Rectangle, Point } = window.ns;
+  const {
+    Figure, Rectangle, Point,
+    QuadraticCurve, QuadraticCurveFigure
+  } = window.ns;
 
   class Tree {
 
@@ -58,16 +61,15 @@
     }
 
     createLeaf(angle, mount = new Point(0, 0)) {
-      const mult = 3;
-      const figure = new Figure(
-        new Point(0, 0),
-        new Point(-2 * mult, 1 * mult),
-        new Point(0, 5 * mult),
-        new Point(2 * mult, 1 * mult)
+      const m = 7; // Size multiplier
+      const leaf = new QuadraticCurveFigure(
+        new QuadraticCurve(0, 0, 0, 0),
+        new QuadraticCurve(-2 * m, 1 * m, 0, 4 * m),
+        new QuadraticCurve(2 * m, 1 * m, 0, 0)
       );
-      figure.translate(mount.x, mount.y);
-      figure.rotate(angle, mount);
-      return figure;
+      leaf.translate(mount.x, mount.y);
+      leaf.rotate(angle, mount);
+      return leaf;
     }
 
     translate(x = 0, y = 0) {

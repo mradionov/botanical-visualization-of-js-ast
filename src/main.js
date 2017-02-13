@@ -65,8 +65,12 @@
     // Horizontally center the tree
     model.translate(scene.getWidth() / 2);
 
-    model.stems.forEach(stem => scene.drawFigure(stem, { fill: '#9B9188' }));
-    model.leaves.forEach(leaf => scene.drawFigure(leaf, { fill: '#9EB63A' }));
+    model.stems.forEach(stem => {
+      scene.drawFigure(stem, { fill: '#9B9188' })
+    });
+    model.leaves.forEach(leaf => {
+      scene.drawQuadraticCurveFigure(leaf, { fill: '#9EB63A' })
+    });
 
     status.clear();
     console.timeEnd('render');

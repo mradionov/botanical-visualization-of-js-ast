@@ -67,6 +67,32 @@
       }
     }
 
+    drawQuadraticCurveFigure(figure, options = { fill: '#000', stroke: null }) {
+      const curves = figure.getCurves();
+
+      this.context.beginPath();
+
+      curves.forEach((curve) => {
+        // Invert Y axis to start drawing from bottom left corner
+        this.context.quadraticCurveTo(
+          curve.getControlPoint().x,
+          this.getHeight() - curve.getControlPoint().y,
+          curve.getEndingPoint().x,
+          this.getHeight() - curve.getEndingPoint().y
+        );
+      });
+
+      if (options.stroke) {
+        this.context.strokeStyle = options.stroke;
+        this.context.stroke();
+      }
+
+      if (options.fill) {
+        this.context.fillStyle = options.fill;
+        this.context.fill();
+      }
+    }
+
     clear() {
       this.context.clearRect(0, 0, this.getWidth(), this.getHeight());
     }
