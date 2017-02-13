@@ -5,7 +5,8 @@
   class Tree {
 
     constructor(tree, options) {
-      this.nodes = [];
+      this.stems = [];
+      this.leaves = [];
 
       this.top = 0;
       this.right = 0;
@@ -14,38 +15,41 @@
       this.width = 0;
       this.height = 0;
 
-      this.addNode(tree, options);
+      this.parseNode(tree, options);
     }
 
-    addNode(node, options, mount) {
-      let figure;
-
-      if (options.leaves && node.isLeaf) {
-        figure = this.createLeafModel(node, mount);
-      } else {
-        figure = this.createNodeModel(node, options, mount);
-      }
-
+    updateBox(figure) {
       this.top = Math.max(this.top, figure.getMaxY());
       this.right = Math.max(this.right, figure.getMaxX());
       this.bottom = Math.min(this.bottom, figure.getMinY());
       this.left = Math.min(this.left, figure.getMinX());
       this.width = this.right - this.left;
       this.height = this.top - this.bottom;
+    }
+
+    parseNode(node, options, mount) {
+      const stem = this.createStem(node, options, mount);
+      this.updateBox(stem);
 
       if (node.isLeaf) {
-        figure.isLeaf = true;
-        this.nodes.push(figure);
+        this.stems.push(stem);
+
+        if (options.leaves) {
+          const leaf = this.createLeaf(stem.angle, stem.getTopCenter());
+          this.updateBox(leaf);
+          this.leaves.push(leaf);
+        }
+
         return this;
       }
 
-      this.nodes.push(figure);
+      this.stems.push(stem);
 
-      this.addNode(node.branch1, options, figure.getTopCenter());
-      this.addNode(node.branch2, options, figure.getTopCenter());
+      this.parseNode(node.branch1, options, stem.getTopCenter());
+      this.parseNode(node.branch2, options, stem.getTopCenter());
     }
 
-    createNodeModel(node, options, mount = new Point(0, 0)) {
+    createStem(node, options, mount = new Point(0, 0)) {
       const figure = new Rectangle(0, 0, options.width, options.height);
       figure.scale(node.scale);
       figure.translate(mount.x - figure.getWidth() / 2, mount.y);
@@ -53,26 +57,25 @@
       return figure;
     }
 
-    createLeafModel(node, mount = new Point(0, 0)) {
+    createLeaf(angle, mount = new Point(0, 0)) {
       const mult = 3;
       const figure = new Figure(
         new Point(0, 0),
-        new Point(1 * mult, 2 * mult),
-        new Point(5 * mult, 0),
-        new Point(1 * mult, -2 * mult)
+        new Point(-2 * mult, 1 * mult),
+        new Point(0, 5 * mult),
+        new Point(2 * mult, 1 * mult)
       );
       figure.translate(mount.x, mount.y);
-      figure.rotate(node.angle, mount);
+      figure.rotate(angle, mount);
       return figure;
     }
 
-    getNodes() {
-      return this.nodes;
-    }
-
     translate(x = 0, y = 0) {
-      this.nodes.forEach((node) => {
-        node.translate(x, y);
+      this.stems.forEach((stem) => {
+        stem.translate(x, y);
+      });
+      this.leaves.forEach((leaf) => {
+        leaf.translate(x, y);
       });
       this.top += y;
       this.bottom += y;
@@ -82,8 +85,11 @@
     }
 
     scale(value) {
-      this.nodes.forEach((node) => {
-        node.scale(value);
+      this.stems.forEach((stem) => {
+        stem.scale(value);
+      });
+      this.leaves.forEach((leaf) => {
+        leaf.scale(value);
       });
       this.top *= value;
       this.bottom *= value;

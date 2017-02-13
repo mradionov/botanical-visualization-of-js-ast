@@ -52,7 +52,7 @@
     // So move the whole tree up and prolong the root
     if (model.bottom < 0) {
       model.translate(0, Math.abs(model.bottom));
-      const root = model.nodes[0];
+      const root = model.stems[0];
       root.setBottomLeft(new Point(root.getBottomLeft().x, 0));
       root.setBottomRight(new Point(root.getBottomRight().x, 0));
     }
@@ -65,13 +65,8 @@
     // Horizontally center the tree
     model.translate(scene.getWidth() / 2);
 
-    model.nodes.forEach(node => {
-      if (options.leaves && node.isLeaf) {
-        scene.drawFigure(node, { fill: '#9EB63A' });
-      } else {
-        scene.drawFigure(node, { fill: '#9B9188' })
-      }
-    });
+    model.stems.forEach(stem => scene.drawFigure(stem, { fill: '#9B9188' }));
+    model.leaves.forEach(leaf => scene.drawFigure(leaf, { fill: '#9EB63A' }));
 
     status.clear();
     console.timeEnd('render');

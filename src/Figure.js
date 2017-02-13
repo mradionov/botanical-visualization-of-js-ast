@@ -10,6 +10,7 @@
       }
 
       this.points = points;
+      this.angle = 0;
     }
 
     getPoints() {
@@ -74,6 +75,7 @@
 
     // TODO: fix translate which comes after rotate
     rotate(angle, pivot = this.getCenter()) {
+      this.angle = angle;
 
       this.points = this.points.map((point) => {
         // Temporarily align figure coords to it's center as a starting point,
