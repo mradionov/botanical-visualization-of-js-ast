@@ -1,6 +1,9 @@
 (function () {
 
-  const { utils } = window.ns;
+  const {
+    utils,
+    Figure, Stem, QuadraticCurveFigure
+  } = window.ns;
 
   class Scene {
 
@@ -41,6 +44,10 @@
     }
 
     drawFigure(figure, options = { fill: '#000', stroke: null }) {
+      if (figure instanceof Stem || figure instanceof QuadraticCurveFigure) {
+        return this.drawQuadraticCurveFigure(figure, options);
+      }
+
       const points = figure.getPoints().slice();
 
       // Close the figure, if it is not the line

@@ -1,11 +1,13 @@
 (function () {
 
-  const { QuadraticCurve } = window.ns;
+  const { Point, QuadraticCurve } = window.ns;
 
   class QuadraticCurveFigure {
 
     constructor(...curves) {
       this.curves = curves;
+
+      this.mount = new Point(0, 0);
     }
 
     getCurves() {
@@ -42,6 +44,14 @@
     getMaxY() {
       const ys = this.curves.map(c => c.getMaxY());
       return Math.max(...ys);
+    }
+
+    setMount(mount) {
+      this.mount = mount;
+    }
+
+    getMount() {
+      return this.mount;
     }
 
   }

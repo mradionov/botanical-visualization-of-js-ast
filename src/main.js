@@ -69,7 +69,7 @@
       scene.drawFigure(stem, { fill: '#9B9188' })
     });
     model.leaves.forEach(leaf => {
-      scene.drawQuadraticCurveFigure(leaf, { fill: '#9EB63A' })
+      scene.drawFigure(leaf, { fill: '#9EB63A' })
     });
 
     status.clear();

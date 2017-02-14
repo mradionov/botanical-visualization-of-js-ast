@@ -2,7 +2,7 @@
 
   const {
     Figure, Rectangle, Point,
-    QuadraticCurve, QuadraticCurveFigure
+    QuadraticCurve, QuadraticCurveFigure, Stem
   } = window.ns;
 
   class Tree {
@@ -31,14 +31,14 @@
     }
 
     parseNode(node, options, mount) {
-      const stem = this.createStem(node, options, mount);
-      this.updateBox(stem);
 
       if (node.isLeaf) {
-        this.stems.push(stem);
+        const leafStem = this.createLeafStem(node, options, mount);
+        this.updateBox(leafStem);
+        this.stems.push(leafStem);
 
         if (options.leaves) {
-          const leaf = this.createLeaf(stem.angle, stem.getTopCenter());
+          const leaf = this.createLeaf(leafStem.angle, leafStem.getMount());
           this.updateBox(leaf);
           this.leaves.push(leaf);
         }
@@ -46,18 +46,40 @@
         return this;
       }
 
+      const stem = this.createStem(node, options, mount);
+      this.updateBox(stem);
       this.stems.push(stem);
 
-      this.parseNode(node.branch1, options, stem.getTopCenter());
-      this.parseNode(node.branch2, options, stem.getTopCenter());
+      this.parseNode(node.branch1, options, stem.getMount());
+      this.parseNode(node.branch2, options, stem.getMount());
     }
 
     createStem(node, options, mount = new Point(0, 0)) {
-      const figure = new Rectangle(0, 0, options.width, options.height);
-      figure.scale(node.scale);
-      figure.translate(mount.x - figure.getWidth() / 2, mount.y);
-      figure.rotate(node.angle, mount);
-      return figure;
+      const bottomWidth = options.width * node.scale;
+      const topWidth = options.width * Math.max(
+        node.branch1 && node.branch1.scale,
+        node.branch2 && node.branch2.scale
+      );
+      const height = options.height * node.scale;
+
+      const stem = new Stem(topWidth, bottomWidth, height);
+
+      stem.translate(mount.x, mount.y);
+      stem.rotate(node.angle, mount);
+
+      return stem;
+    }
+
+    createLeafStem(node, options, mount = new Point(0, 0)) {
+      const bottomWidth = options.width * node.scale;
+      const height = options.height * node.scale;
+
+      const leafStem = new Stem(0, bottomWidth, height);
+
+      leafStem.translate(mount.x, mount.y);
+      leafStem.rotate(node.angle, mount);
+
+      return leafStem;
     }
 
     createLeaf(angle, mount = new Point(0, 0)) {

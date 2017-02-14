@@ -61,6 +61,10 @@
       return this.getTopLeft().average(this.getTopRight());
     }
 
+    getMount() {
+      return this.getTopCenter();
+    }
+
   }
 
   Object.assign(window.ns, {
