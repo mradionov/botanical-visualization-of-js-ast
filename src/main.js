@@ -1,12 +1,17 @@
 (function () {
 
   const {
-    config, settings, status,
+    config, utils, settings, status,
     source, parse, transform, draw,
     Scene, Figure, Point
   } = window.ns;
 
   const scene = new Scene('.scene');
+
+  const leafColors = [
+    '#9EB63A',
+    '#B5CC41',
+  ];
 
   function main() {
 
@@ -69,7 +74,7 @@
       scene.drawFigure(stem, { fill: '#9B9188' })
     });
     model.leaves.forEach(leaf => {
-      scene.drawFigure(leaf, { fill: '#9EB63A' })
+      scene.drawFigure(leaf, { fill: utils.randomElement(leafColors) })
     });
 
     status.clear();
