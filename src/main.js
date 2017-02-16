@@ -38,6 +38,8 @@
 
     source.save();
 
+    status.clear();
+
     console.log('-----------------------------------');
     const options = {
       height: config.STEM_HEIGHT,

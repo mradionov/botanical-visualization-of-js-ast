@@ -31,12 +31,16 @@ html, body {
 }
 
 .status {
+  position: absolute;
+  top: 0;
+  right: 0;
+  left: 0;
   padding: 5px;
   color: #bbb;
 }
 
 .status.error {
-  background-color: #f7cece;
+  background-color: rgba(247, 143, 143, 0.4);
   color: #a50000;
 }
 
