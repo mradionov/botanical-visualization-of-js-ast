@@ -38,7 +38,6 @@
 
     source.save();
 
-    scene.clear();
     console.log('-----------------------------------');
     const options = {
       height: config.STEM_HEIGHT,
@@ -80,6 +79,8 @@
 
     .then(time('render'))
     .then((model) => {
+      scene.clear();
+
       // Branches might go under the root because they are too deep
       // So move the whole tree up and prolong the root
       if (model.bottom < 0) {
