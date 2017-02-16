@@ -31,11 +31,13 @@ html, body {
 }
 
 .status {
-  position: absolute;
-  top: 0;
-  right: 0;
-  left: 0;
   padding: 5px;
+  color: #bbb;
+}
+
+.status.error {
+  background-color: #f7cece;
+  color: #a50000;
 }
 
 canvas {

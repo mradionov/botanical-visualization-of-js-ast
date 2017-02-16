@@ -13,6 +13,27 @@
     '#B5CC41',
   ];
 
+  function time(id) {
+    return args => {
+      console.time(id);
+      return args;
+    };
+  }
+
+  function timeEnd(id) {
+    return args => {
+      console.timeEnd(id);
+      return args;
+    };
+  }
+
+  function progress(message) {
+    return args => {
+      status.progress(message);
+      return args;
+    };
+  }
+
   function main() {
 
     source.save();
@@ -30,29 +51,35 @@
     };
     console.log(options);
 
-    console.time('source');
-    status.progress('Retrieving source');
-    source.get().then((text) => {
-      console.timeEnd('source');
+    Promise
+    .resolve(true)
 
-      console.time('parse');
-      status.progress('Parsing');
-      const ast = parse(text);
-      console.timeEnd('parse');
+    .then(progress('Retrieving source'))
+    .then(time('source'))
+    .then(() => source.get())
+    .then(timeEnd('source'))
 
-      console.time('transform');
-      status.progress('Transforming');
-      const tree = transform(ast, options);
-      console.timeEnd('transform');
+    .then(progress('Rendering'))
+    .then(time('parse'))
+    .then(text => {
+      return new Promise((resolve) => {
+        setTimeout(() => {
+          resolve(parse(text));
+        });
+      });
+    })
+    .then(timeEnd('parse'))
 
-      console.time('draw');
-      status.progress('Drawing');
-      const model = draw(tree, options);
-      console.timeEnd('draw');
+    .then(time('transform'))
+    .then(ast => transform(ast, options))
+    .then(timeEnd('transform'))
 
-      status.progress('Drawing');
-      console.time('render');
+    .then(time('draw'))
+    .then(tree => draw(tree, options))
+    .then(timeEnd('draw'))
 
+    .then(time('render'))
+    .then((model) => {
       // Branches might go under the root because they are too deep
       // So move the whole tree up and prolong the root
       if (model.bottom < 0) {
@@ -78,7 +105,11 @@
       });
 
       status.clear();
-      console.timeEnd('render');
+    })
+    .then(timeEnd('render'))
+    .catch((err) => {
+      console.error(err);
+      status.error(err);
     });
 
   }

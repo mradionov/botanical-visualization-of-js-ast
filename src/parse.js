@@ -2,8 +2,13 @@
 (function () {
 
   function parse(source) {
-    const ast = esprima.parse(source);
-    return ast;
+    return new Promise((resolve, reject) => {
+      try {
+        resolve(esprima.parse(source));
+      } catch (err) {
+        reject(err);
+      }
+    });
   }
 
   Object.assign(window.ns, {
