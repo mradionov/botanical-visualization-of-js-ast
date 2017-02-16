@@ -30,15 +30,15 @@
       this.height = this.top - this.bottom;
     }
 
-    parseNode(node, options, mount) {
+    parseNode(node, options, parentStem = null) {
 
       if (node.isLeaf) {
-        const leafStem = this.createLeafStem(node, options, mount);
+        const leafStem = this.createLeafStem(node, options, parentStem);
         this.updateBox(leafStem);
         this.stems.push(leafStem);
 
         if (options.leaves) {
-          const leaf = this.createLeaf(leafStem.angle, leafStem.getMount());
+          const leaf = this.createLeaf(leafStem.angle, leafStem);
           this.updateBox(leaf);
           this.leaves.push(leaf);
         }
@@ -46,15 +46,15 @@
         return this;
       }
 
-      const stem = this.createStem(node, options, mount);
+      const stem = this.createStem(node, options, parentStem);
       this.updateBox(stem);
       this.stems.push(stem);
 
-      this.parseNode(node.branch1, options, stem.getMount());
-      this.parseNode(node.branch2, options, stem.getMount());
+      this.parseNode(node.branch1, options, stem);
+      this.parseNode(node.branch2, options, stem);
     }
 
-    createStem(node, options, mount = new Point(0, 0)) {
+    createStem(node, options, parentStem = null) {
       const bottomWidth = options.width * node.scale;
       const topWidth = options.width * Math.max(
         node.branch1 && node.branch1.scale,
@@ -64,33 +64,48 @@
 
       const stem = new Stem(topWidth, bottomWidth, height);
 
-      stem.translate(mount.x, mount.y);
-      stem.rotate(node.angle, mount);
+      if (parentStem) {
+        const mount = parentStem.getMount();
+        stem.translate(mount.x, mount.y);
+        stem.rotate(node.angle, mount);
+        // stem.setBottomLeft(parentStem.getTopLeft());
+        // stem.setBottomRight(parentStem.getTopRight());
+      }
 
       return stem;
     }
 
-    createLeafStem(node, options, mount = new Point(0, 0)) {
+    createLeafStem(node, options, parentStem = null) {
       const bottomWidth = options.width * node.scale;
       const height = options.height * node.scale;
 
       const leafStem = new Stem(0, bottomWidth, height);
 
-      leafStem.translate(mount.x, mount.y);
-      leafStem.rotate(node.angle, mount);
+      if (parentStem) {
+        const mount = parentStem.getMount();
+        leafStem.translate(mount.x, mount.y);
+        leafStem.rotate(node.angle, mount);
+        // leafStem.setBottomLeft(parentStem.getTopLeft());
+        // leafStem.setBottomRight(parentStem.getTopRight());
+      }
 
       return leafStem;
     }
 
-    createLeaf(angle, mount = new Point(0, 0)) {
+    createLeaf(angle, parentStem = null) {
       const m = 7; // Size multiplier
       const leaf = new QuadraticCurveFigure(
         new QuadraticCurve(0, 0, 0, 0),
         new QuadraticCurve(-2 * m, 1 * m, 0, 4 * m),
         new QuadraticCurve(2 * m, 1 * m, 0, 0)
       );
-      leaf.translate(mount.x, mount.y);
-      leaf.rotate(angle, mount);
+
+      if (parentStem) {
+        const mount = parentStem.getMount();
+        leaf.translate(mount.x, mount.y);
+        leaf.rotate(angle, mount);
+      }
+
       return leaf;
     }
 

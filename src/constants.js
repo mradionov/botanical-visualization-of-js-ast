@@ -7,6 +7,9 @@
     DIRECTION_LEFT: 'left',
     DIRECTION_RIGHT: 'right',
 
+    SOURCE_POPULAR: 'popular',
+    SOURCE_INPUT: 'input',
+
   };
 
   Object.assign(window.ns, {

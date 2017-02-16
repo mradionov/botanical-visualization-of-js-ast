@@ -32,53 +32,55 @@
 
     console.time('source');
     status.progress('Retrieving source');
-    const text = source.get();
-    console.timeEnd('source');
+    source.get().then((text) => {
+      console.timeEnd('source');
 
-    console.time('parse');
-    status.progress('Parsing');
-    const ast = parse(text);
-    console.timeEnd('parse');
+      console.time('parse');
+      status.progress('Parsing');
+      const ast = parse(text);
+      console.timeEnd('parse');
 
-    console.time('transform');
-    status.progress('Transforming');
-    const tree = transform(ast, options);
-    console.timeEnd('transform');
+      console.time('transform');
+      status.progress('Transforming');
+      const tree = transform(ast, options);
+      console.timeEnd('transform');
 
-    console.time('draw');
-    status.progress('Drawing');
-    const model = draw(tree, options);
-    console.timeEnd('draw');
+      console.time('draw');
+      status.progress('Drawing');
+      const model = draw(tree, options);
+      console.timeEnd('draw');
 
-    status.progress('Drawing');
-    console.time('render');
+      status.progress('Drawing');
+      console.time('render');
 
-    // Branches might go under the root because they are too deep
-    // So move the whole tree up and prolong the root
-    if (model.bottom < 0) {
-      model.translate(0, Math.abs(model.bottom));
-      const root = model.stems[0];
-      root.setBottomLeft(new Point(root.getBottomLeft().x, 0));
-      root.setBottomRight(new Point(root.getBottomRight().x, 0));
-    }
+      // Branches might go under the root because they are too deep
+      // So move the whole tree up and prolong the root
+      if (model.bottom < 0) {
+        model.translate(0, Math.abs(model.bottom));
+        const root = model.stems[0];
+        root.setBottomLeft(new Point(root.getBottomLeft().x, 0));
+        root.setBottomRight(new Point(root.getBottomRight().x, 0));
+      }
 
-    // Check if the tree is to big for the scene, make it fit
-    const sceneWidth = scene.getWidth();
-    const sceneHeight = scene.getHeight();
-    model.fit(sceneWidth, sceneHeight);
+      // Check if the tree is to big for the scene, make it fit
+      const sceneWidth = scene.getWidth();
+      const sceneHeight = scene.getHeight();
+      model.fit(sceneWidth, sceneHeight);
 
-    // Horizontally center the tree
-    model.translate(scene.getWidth() / 2);
+      // Horizontally center the tree
+      model.translate(scene.getWidth() / 2);
 
-    model.stems.forEach(stem => {
-      scene.drawFigure(stem, { fill: '#9B9188' })
+      model.stems.forEach(stem => {
+        scene.drawFigure(stem, { fill: '#9B9188' })
+      });
+      model.leaves.forEach(leaf => {
+        scene.drawFigure(leaf, { fill: utils.randomElement(leafColors) })
+      });
+
+      status.clear();
+      console.timeEnd('render');
     });
-    model.leaves.forEach(leaf => {
-      scene.drawFigure(leaf, { fill: utils.randomElement(leafColors) })
-    });
 
-    status.clear();
-    console.timeEnd('render');
   }
 
   source.load();

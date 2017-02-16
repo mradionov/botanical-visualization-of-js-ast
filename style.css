@@ -5,6 +5,13 @@ html, body {
   display: flex;
   flex: 1;
   flex-direction: column;
+  background-color: #EEEEEE;
+  font-size: 14px;
+}
+
+* {
+  color: #222222;
+  font-family: "Courier New", Courier, monospace;
 }
 
 .header {
@@ -46,28 +53,106 @@ canvas {
   display: flex;
   flex-direction: column;
   flex: 2;
+  background: #fff;
+  border: 2px solid #eee;
+  border-radius: 5px;
+  box-shadow: 1px 2px 2px rgba(0, 0, 0, 0.05);
+}
+
+.tab-nav {
+  margin: 0;
+  padding: 1px 5px;
+  list-style-type: none;
+  background-color: #fdfdfd;
+  border-bottom: 2px solid #f3f3f3;
+}
+
+.tab-nav li {
+  display: inline-block;
+  padding: 10px;
+  cursor: pointer;
+}
+
+.tab-nav li.active {
+  font-weight: bold;
+}
+
+
+.tab-nav li:hover {
+  color: #76a005;
+}
+
+.tabs {
+  flex: 1;
+  display: flex;
+}
+
+.tab {
+  display: none;
+  padding-top: 10px;
+  flex: 1;
+}
+
+.tab.active {
+  display: flex;
+}
+
+.popular li {
+  cursor: pointer;
+}
+
+.popular li:hover {
+  color: #76a005;
+}
+
+.popular li.active {
+  color: #76a005;
+  font-weight: bold;
 }
 
 .source textarea {
   flex: 1;
+  border: 1px solid #eee;
+  margin: 0 10px 10px 10px;
+  border-radius: 3px;
 }
 
 .actions {
   flex: 0;
   margin-top: 20px;
+  padding-left: 2px;
 }
+
 
 .settings {
   flex: 1;
   margin-top: 20px;
+  background: #fff;
+  border: 2px solid #eee;
+  border-radius: 5px;
+  box-shadow: 1px 2px 2px rgba(0, 0, 0, 0.05);
+  padding: 0px 15px;
 }
 
 .setting {
   margin-top: 10px;
+  border-bottom: 1px solid #eee;
+  padding-bottom: 5px;
 }
 
 .setting .title {
   margin-bottom: 5px;
+}
+
+button {
+  border: 1px solid #7fab07;
+  background-color: #719807;
+  background-image: linear-gradient(to bottom,#8aba08,#719807);
+  color: #fff;
+  border-radius: 3px;
+  padding: 5px 15px;
+  cursor: pointer;
+  font-size: 16px;
 }
 
 input[type="radio"],

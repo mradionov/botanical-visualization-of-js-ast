@@ -18,11 +18,29 @@
     };
   }
 
+  function request(url) {
+    return new Promise((resolve, reject) => {
+      const req = new XMLHttpRequest();
+      req.open('GET', url);
+      req.onreadystatechange = () => {
+        if (req.readyState === XMLHttpRequest.DONE) {
+          if (req.status === 200) {
+            resolve(req.responseText);
+          } else {
+            reject(req);
+          }
+        }
+      };
+      req.send(null);
+    });
+  }
+
 
   const utils = {
     debounce,
     random,
     randomElement,
+    request,
   };
 
   Object.assign(window.ns, {

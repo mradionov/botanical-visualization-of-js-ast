@@ -36,6 +36,22 @@
       return this.getPoint(3);
     }
 
+    setBottomLeft(point) {
+      return this.setPoint(0, point);
+    }
+
+    setTopLeft(point) {
+      return this.setPoint(1, point);
+    }
+
+    setTopRight(point) {
+      return this.setPoint(2, point);
+    }
+
+    setBottomRight(point) {
+      return this.setPoint(3, point);
+    }
+
     getTopCenter() {
       return this.getTopLeft().average(this.getTopRight());
     }
