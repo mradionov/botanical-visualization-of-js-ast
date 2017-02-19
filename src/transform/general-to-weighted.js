@@ -1,6 +1,6 @@
 (function () {
 
-  function transformNode(generalNode, options = { orphan: false }) {
+  function transformNode(generalNode, options = { removeSameChildren: false }) {
     const weightedNode = {
       weight: 2,
       children: [],
@@ -11,7 +11,7 @@
     for (let i = 0; i < generalNode.children.length; i++) {
       const child = transformNode(generalNode.children[i], options);
 
-      if (options.orphan) {
+      if (options.removeSameChildren) {
         if (weights.indexOf(child.weight) === -1) {
           weights.push(child.weight);
           weightedNode.children.push(child);

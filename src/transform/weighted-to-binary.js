@@ -9,14 +9,18 @@
       tilt: 90,
     },
     params = {
-      scale: 1,
       angle: 0,
+      relativeAngle: 0,
+      scale: 1,
+      relativeScale: 1,
       direction: 0,
     }
   ) {
     const binaryNode = {
       angle: params.angle,
+      relativeAngle: params.relativeAngle,
       scale: params.scale,
+      relativeScale: params.relativeScale,
       direction: params.direction,
       weight: weightedNode.weight,
       branch1: null,
@@ -64,19 +68,22 @@
 
     binaryNode.branch1 = transformNode(branch1, options, {
       angle: direction1 * options.tilt * weightRatio2 + params.angle,
+      relativeAngle: direction1 * options.tilt * weightRatio2,
       scale: params.scale * scale1,
+      relativeScale: scale1,
       direction: direction1,
     });
 
     binaryNode.branch2 = transformNode(branch2, options, {
       angle: direction2 * options.tilt * weightRatio1 + params.angle,
+      relativeAngle: direction2 * options.tilt * weightRatio1,
       scale: params.scale * scale2,
+      relativeScale: scale2,
       direction: direction2,
     });
 
     return binaryNode;
   }
-
 
   function weightedToBinary(weightedTree, options) {
     return transformNode(weightedTree, options);

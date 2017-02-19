@@ -6,8 +6,9 @@
   // Map internal setting name to HTML form name
   const map = {
     direction: 'settings-branch-direction',
-    orphan: 'settings-remove-same-children',
-    leaves: 'settings-show-leaves',
+    removeSameChildren: 'settings-remove-same-children',
+    removeTinyChildren: 'settings-remove-tiny-children',
+    showLeaves: 'settings-show-leaves',
   };
 
   function get(name) {

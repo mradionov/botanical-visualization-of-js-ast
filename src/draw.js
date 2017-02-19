@@ -15,12 +15,17 @@
 
     parseNode(node, options, parentStem = null) {
 
+      if (options.removeTinyChildren && node.relativeScale < 0.1) {
+        return this;
+      }
+
       if (node.isLeaf) {
+
         const leafStem = this.createLeafStem(node, options, parentStem);
         this.box.addPoints(leafStem.getPoints());
         this.stems.push(leafStem);
 
-        if (options.leaves) {
+        if (options.showLeaves) {
           const leaf = this.createLeaf(leafStem.angle, leafStem);
           this.box.addPoints(leaf.getPoints());
           this.leaves.push(leaf);

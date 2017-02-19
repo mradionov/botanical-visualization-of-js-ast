@@ -47,8 +47,9 @@
       tilt: config.TILT,
 
       direction: settings.get('direction'),
-      orphan: settings.get('orphan'),
-      leaves: settings.get('leaves'),
+      removeSameChildren: settings.get('removeSameChildren'),
+      removeTinyChildren: settings.get('removeTinyChildren'),
+      showLeaves: settings.get('showLeaves'),
     };
     console.log(options);
 
