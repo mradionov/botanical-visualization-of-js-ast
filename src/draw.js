@@ -1,9 +1,6 @@
 (function () {
 
-  const {
-    Figure, Rectangle, Point,
-    QuadraticCurve, QuadraticCurveFigure, Stem
-  } = window.ns;
+  const { BoundingBox, Stem, Leaf } = window.ns;
 
   class Tree {
 
@@ -11,35 +8,21 @@
       this.stems = [];
       this.leaves = [];
 
-      this.top = 0;
-      this.right = 0;
-      this.bottom = 0;
-      this.left = 0;
-      this.width = 0;
-      this.height = 0;
+      this.box = new BoundingBox();
 
       this.parseNode(tree, options);
-    }
-
-    updateBox(figure) {
-      this.top = Math.max(this.top, figure.getMaxY());
-      this.right = Math.max(this.right, figure.getMaxX());
-      this.bottom = Math.min(this.bottom, figure.getMinY());
-      this.left = Math.min(this.left, figure.getMinX());
-      this.width = this.right - this.left;
-      this.height = this.top - this.bottom;
     }
 
     parseNode(node, options, parentStem = null) {
 
       if (node.isLeaf) {
         const leafStem = this.createLeafStem(node, options, parentStem);
-        this.updateBox(leafStem);
+        this.box.addPoints(leafStem.getPoints());
         this.stems.push(leafStem);
 
         if (options.leaves) {
           const leaf = this.createLeaf(leafStem.angle, leafStem);
-          this.updateBox(leaf);
+          this.box.addPoints(leaf.getPoints());
           this.leaves.push(leaf);
         }
 
@@ -47,7 +30,7 @@
       }
 
       const stem = this.createStem(node, options, parentStem);
-      this.updateBox(stem);
+      this.box.addPoints(stem.getPoints());
       this.stems.push(stem);
 
       this.parseNode(node.branch1, options, stem);
@@ -62,14 +45,13 @@
       );
       const height = options.height * node.scale;
 
-      const stem = new Stem(topWidth, bottomWidth, height);
+      const stem = new Stem(topWidth, bottomWidth, height, node);
 
       if (parentStem) {
         const mount = parentStem.getMount();
         stem.translate(mount.x, mount.y);
         stem.rotate(node.angle, mount);
-        // stem.setBottomLeft(parentStem.getTopLeft());
-        // stem.setBottomRight(parentStem.getTopRight());
+        stem.connectToParent(node, parentStem);
       }
 
       return stem;
@@ -79,26 +61,20 @@
       const bottomWidth = options.width * node.scale;
       const height = options.height * node.scale;
 
-      const leafStem = new Stem(0, bottomWidth, height);
+      const leafStem = new Stem(0, bottomWidth, height, node);
 
       if (parentStem) {
         const mount = parentStem.getMount();
         leafStem.translate(mount.x, mount.y);
         leafStem.rotate(node.angle, mount);
-        // leafStem.setBottomLeft(parentStem.getTopLeft());
-        // leafStem.setBottomRight(parentStem.getTopRight());
+        leafStem.connectToParent(node, parentStem);
       }
 
       return leafStem;
     }
 
     createLeaf(angle, parentStem = null) {
-      const m = 7; // Size multiplier
-      const leaf = new QuadraticCurveFigure(
-        new QuadraticCurve(0, 0, 0, 0),
-        new QuadraticCurve(-2 * m, 1 * m, 0, 4 * m),
-        new QuadraticCurve(2 * m, 1 * m, 0, 0)
-      );
+      const leaf = new Leaf();
 
       if (parentStem) {
         const mount = parentStem.getMount();
@@ -116,10 +92,7 @@
       this.leaves.forEach((leaf) => {
         leaf.translate(x, y);
       });
-      this.top += y;
-      this.bottom += y;
-      this.left += x;
-      this.right += x;
+      this.box.translate(x, y);
       return this;
     }
 
@@ -130,12 +103,7 @@
       this.leaves.forEach((leaf) => {
         leaf.scale(value);
       });
-      this.top *= value;
-      this.bottom *= value;
-      this.left *= value;
-      this.right *= value;
-      this.width *= value;
-      this.height *= value;
+      this.box.scale(value);
       return this;
     }
 
@@ -144,10 +112,12 @@
       // Instead of using actual width of the tree, use a doubled width of
       // widest branch (left or right), it will allow to easily center
       // the tree on canvas
-      const maxWidth = Math.max(Math.abs(this.left), Math.abs(this.right)) * 2;
+      const maxWidth = 2 * Math.max(
+        Math.abs(this.box.left), Math.abs(this.box.right)
+      );
 
       const scaleX = maxWidth > width ? (width / maxWidth) : 1;
-      const scaleY = this.height > height ? (height / this.height) : 1;
+      const scaleY = this.box.height > height ? (height / this.box.height) : 1;
       const scale = Math.min(scaleX, scaleY);
 
       this.scale(scale);

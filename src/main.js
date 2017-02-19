@@ -101,10 +101,10 @@
       model.translate(scene.getWidth() / 2);
 
       model.stems.forEach(stem => {
-        scene.drawFigure(stem, { fill: '#9B9188' })
+        scene.drawCurveFigure(stem, { fill: '#9B9188' });
       });
       model.leaves.forEach(leaf => {
-        scene.drawFigure(leaf, { fill: utils.randomElement(leafColors) })
+        scene.drawCurveFigure(leaf, { fill: utils.randomElement(leafColors) })
       });
 
       status.clear();

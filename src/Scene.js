@@ -1,9 +1,6 @@
 (function () {
 
-  const {
-    utils,
-    Figure, Stem, QuadraticCurveFigure
-  } = window.ns;
+  const { utils } = window.ns;
 
   class Scene {
 
@@ -44,9 +41,6 @@
     }
 
     drawFigure(figure, options = { fill: '#000', stroke: null }) {
-      if (figure instanceof Stem || figure instanceof QuadraticCurveFigure) {
-        return this.drawQuadraticCurveFigure(figure, options);
-      }
 
       const points = figure.getPoints().slice();
 
@@ -60,7 +54,7 @@
 
       points.forEach((point) => {
         // Invert Y axis to start drawing from bottom left corner
-        this.context.lineTo(point.x, this.getHeight() - point.y);
+        this.context.lineTo(point.x, this.height - point.y);
       });
 
       if (options.stroke) {
@@ -74,18 +68,20 @@
       }
     }
 
-    drawQuadraticCurveFigure(figure, options = { fill: '#000', stroke: null }) {
+    drawCurveFigure(figure, options = { fill: '#000', stroke: null }) {
       const curves = figure.getCurves();
+      const startPoint = curves[0].getStart();
 
       this.context.beginPath();
+      this.context.moveTo(startPoint.x, this.height - startPoint.y);
 
       curves.forEach((curve) => {
         // Invert Y axis to start drawing from bottom left corner
         this.context.quadraticCurveTo(
-          curve.getControlPoint().x,
-          this.getHeight() - curve.getControlPoint().y,
-          curve.getEndingPoint().x,
-          this.getHeight() - curve.getEndingPoint().y
+          curve.getControl().x,
+          this.height - curve.getControl().y,
+          curve.getEnd().x,
+          this.height - curve.getEnd().y
         );
       });
 
@@ -101,7 +97,7 @@
     }
 
     clear() {
-      this.context.clearRect(0, 0, this.getWidth(), this.getHeight());
+      this.context.clearRect(0, 0, this.width, this.height);
     }
 
   }

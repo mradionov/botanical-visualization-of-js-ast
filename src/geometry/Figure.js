@@ -27,6 +27,8 @@
       return this;
     }
 
+    // TODO: calculate mins and maxs when instantiating
+    // or when using addPoint, setPoint, removePoints
     getMinX() {
       const xs = this.points.map(p => p.x);
       return Math.min(...xs);
@@ -74,18 +76,11 @@
     }
 
     // TODO: fix translate which comes after rotate
-    rotate(angle, pivot = this.getCenter()) {
+    rotate(angle, center = this.getCenter()) {
       this.angle = angle;
 
       this.points = this.points.map((point) => {
-        // Temporarily align figure coords to it's center as a starting point,
-        // like it's center is (0,0)
-        const relative = point.subtract(pivot);
-        // Rotate the vector
-        const rotated = relative.rotate(angle);
-        // Restore world coordinates
-        const absolute = rotated.add(pivot);
-        return absolute;
+        return point.rotate(angle, center);
       });
 
       return this;

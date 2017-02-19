@@ -11,11 +11,13 @@
     params = {
       scale: 1,
       angle: 0,
+      direction: 0,
     }
   ) {
     const binaryNode = {
       angle: params.angle,
       scale: params.scale,
+      direction: params.direction,
       weight: weightedNode.weight,
       branch1: null,
       branch2: null,
@@ -63,11 +65,13 @@
     binaryNode.branch1 = transformNode(branch1, options, {
       angle: direction1 * options.tilt * weightRatio2 + params.angle,
       scale: params.scale * scale1,
+      direction: direction1,
     });
 
     binaryNode.branch2 = transformNode(branch2, options, {
       angle: direction2 * options.tilt * weightRatio1 + params.angle,
       scale: params.scale * scale2,
+      direction: direction2,
     });
 
     return binaryNode;

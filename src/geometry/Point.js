@@ -1,0 +1,112 @@
+(function () {
+
+  class Vector {
+
+    constructor(x = 0, y = 0) {
+      this.x = x;
+      this.y = y;
+
+      Object.freeze(this);
+    }
+
+    add(v) {
+      return new Vector(this.x + v.x, this.y + v.y);
+    }
+
+    subtract(v) {
+      return new Vector(this.x - v.x, this.y - v.y);
+    }
+
+    addScalar(value) {
+      return new Vector(this.x + value, this.y + value);
+    }
+
+    multiplyScalar(value = 1) {
+      return new Vector(this.x * value, this.y * value);
+    }
+
+    divideScalar(value) {
+      if (value === 0) {
+        throw new Error('Division by zero');
+      }
+      return new Vector(this.x / value, this.y / value);
+    }
+
+    translate(x = 0, y = 0) {
+      return new Vector(this.x + x, this.y + y);
+    }
+
+    scale(value = 1) {
+      return this.multiplyScalar(value);
+    }
+
+    getAngle() {
+      const angle = Math.atan2(this.y, this.x);
+      const angleDeg = angle / Math.PI * 180;
+      return angleDeg;
+    }
+
+    // ?
+    average(v) {
+      return new Vector((this.x + v.x) / 2, (this.y + v.y) / 2);
+    }
+
+    getLength() {
+      return Math.sqrt(this.x * this.x + this.y * this.y);
+    }
+
+    normalize() {
+      return this.divideScalar(this.getLength());
+    }
+
+    // http://math.stackexchange.com/questions/175896/finding-a-point-along-a-line-a-certain-distance-away-from-another-point
+    // 0 < t < 1 - position on the line
+    pointOnLineWith(v, t) {
+      return new Vector(
+        (1 - t) * this.x + t * v.x,
+        (1 - t) * this.y + t * v.y
+      );
+    }
+
+    normal() {
+      return new Vector(
+        -this.y,
+        this.x
+      );
+    }
+
+    // http://stackoverflow.com/questions/1243614/how-do-i-calculate-the-normal-vector-of-a-line-segment
+    normalWith(v) {
+      return new Vector(
+        (this.y - v.y),
+        -(this.x - v.x)
+      );
+    }
+
+    // https://en.wikipedia.org/wiki/Rotation_matrix#In_two_dimensions
+    rotate(angleDeg, center = new Vector(0, 0)) {
+      const angle = angleDeg * Math.PI / 180;
+
+      const c = Math.cos(angle);
+      const s = Math.sin(angle);
+
+      // Temporarily align vector coords to center coords
+      var x = this.x - center.x;
+      var y = this.y - center.y;
+
+      return new Vector(
+        x * c - y * s + center.x,
+        x * s + y * c + center.y
+      );
+    }
+
+  }
+
+  const Point = Vector;
+
+  Object.assign(window.ns, {
+    Point,
+    Vector,
+  });
+
+}());
