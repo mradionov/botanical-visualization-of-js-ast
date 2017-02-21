@@ -13,16 +13,24 @@
       return [this.start, this.end];
     }
 
+    setStart(start) {
+      this.start = start;
+
+      return this;
+    }
+
     getStart() {
       return this.start;
     }
 
-    getEnd() {
-      return this.end;
+    setEnd(end) {
+      this.end = end;
+
+      return this;
     }
 
-    getAngle() {
-      return this.end.subtract(this.start).getAngle();
+    getEnd() {
+      return this.end;
     }
 
     translate(x = 0, y = 0) {

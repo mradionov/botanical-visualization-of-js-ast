@@ -84,7 +84,7 @@
       if (parentStem) {
         const mount = parentStem.getMount();
         leaf.translate(mount.x, mount.y);
-        leaf.rotate(angle, mount);
+        leaf.rotate(parentStem.node.angle, mount);
       }
 
       return leaf;

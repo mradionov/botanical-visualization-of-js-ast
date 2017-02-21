@@ -35,9 +35,19 @@
     });
   }
 
+  function defaults(dest, source) {
+    Object.keys(source).forEach((key) => {
+      if (typeof dest[key] === 'undefined') {
+        dest[key] = source[key];
+      }
+    });
+    return dest;
+  }
+
 
   const utils = {
     debounce,
+    defaults,
     random,
     randomElement,
     request,

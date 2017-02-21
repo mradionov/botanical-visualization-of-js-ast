@@ -57,6 +57,10 @@
         return Promise.resolve(popularCache[currentPopularLink]);
       }
 
+      if (!currentPopularLink) {
+        return Promise.reject('Popular source not selected');
+      }
+
       return utils.request(currentPopularLink).then((text) => {
         popularCache[currentPopularLink] = text;
         return text;

@@ -40,12 +40,6 @@
       return this.multiplyScalar(value);
     }
 
-    getAngle() {
-      const angle = Math.atan2(this.y, this.x);
-      const angleDeg = angle / Math.PI * 180;
-      return angleDeg;
-    }
-
     // ?
     average(v) {
       return new Vector((this.x + v.x) / 2, (this.y + v.y) / 2);
@@ -57,30 +51,6 @@
 
     normalize() {
       return this.divideScalar(this.getLength());
-    }
-
-    // http://math.stackexchange.com/questions/175896/finding-a-point-along-a-line-a-certain-distance-away-from-another-point
-    // 0 < t < 1 - position on the line
-    pointOnLineWith(v, t) {
-      return new Vector(
-        (1 - t) * this.x + t * v.x,
-        (1 - t) * this.y + t * v.y
-      );
-    }
-
-    normal() {
-      return new Vector(
-        -this.y,
-        this.x
-      );
-    }
-
-    // http://stackoverflow.com/questions/1243614/how-do-i-calculate-the-normal-vector-of-a-line-segment
-    normalWith(v) {
-      return new Vector(
-        (this.y - v.y),
-        -(this.x - v.x)
-      );
     }
 
     // https://en.wikipedia.org/wiki/Rotation_matrix#In_two_dimensions

@@ -40,7 +40,34 @@
       return this.height;
     }
 
-    drawFigure(figure, options = { fill: '#000', stroke: null }) {
+    x(x) {
+      return x;
+    }
+
+    // Invert Y axis to start drawing from bottom left corner
+    y(y) {
+      return this.height - y;
+    }
+
+    drawPoint(point, options = {}) {
+
+      this.context.beginPath();
+
+      this.context.arc(
+        this.x(point.x),
+        this.y(point.y),
+        options.size || 4,
+        0,
+        2 * Math.PI
+      );
+
+      this.stroke(options.stroke);
+      this.fill(options.fill);
+
+      return this;
+    }
+
+    drawFigure(figure, options = {}) {
 
       const points = figure.getPoints().slice();
 
@@ -53,57 +80,68 @@
       this.context.beginPath();
 
       points.forEach((point) => {
-        // Invert Y axis to start drawing from bottom left corner
-        this.context.lineTo(point.x, this.height - point.y);
+        this.context.lineTo(this.x(point.x), this.y(point.y));
       });
 
-      if (options.stroke) {
-        this.context.strokeStyle = options.stroke;
-        this.context.stroke();
-      }
+      this.stroke(options.stroke);
+      this.fill(options.fill);
 
-      if (options.fill) {
-        this.context.fillStyle = options.fill;
-        this.context.fill();
-      }
+      return this;
     }
 
-    drawCurveFigure(figure, options = { fill: '#000', stroke: null }) {
+    drawCurveFigure(figure, options = {}) {
       const curves = figure.getCurves();
       const startPoint = curves[0].getStart();
 
       this.context.beginPath();
-      this.context.moveTo(startPoint.x, this.height - startPoint.y);
+      this.context.moveTo(this.x(startPoint.x), this.y(startPoint.y));
 
       curves.forEach((curve) => {
         // Invert Y axis to start drawing from bottom left corner
         this.context.quadraticCurveTo(
           curve.getControl().x,
-          this.height - curve.getControl().y,
+          this.y(curve.getControl().y),
           curve.getEnd().x,
-          this.height - curve.getEnd().y
+          this.y(curve.getEnd().y)
         );
       });
 
-      if (options.stroke) {
-        this.context.strokeStyle = options.stroke;
-        this.context.stroke();
-      }
+      this.stroke(options.stroke);
+      this.fill(options.fill);
 
-      if (options.fill) {
-        this.context.fillStyle = options.fill;
-        this.context.fill();
-      }
+      return this;
+    }
+
+    stroke(color = null) {
+      if (!color) return;
+
+      this.context.strokeStyle = color;
+      this.context.stroke();
+
+      return this;
+    }
+
+    fill(color = '#000') {
+      if (!color) return;
+
+      this.context.fillStyle = color;
+      this.context.fill();
+
+      return this;
     }
 
     clear() {
       this.context.clearRect(0, 0, this.width, this.height);
+
+      return this;
     }
 
   }
 
+  const scene = new Scene('.scene');
+
   Object.assign(window.ns, {
-    Scene,
+    scene,
   });
 
 }());

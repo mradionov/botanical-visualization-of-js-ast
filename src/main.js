@@ -3,10 +3,9 @@
   const {
     config, utils, settings, status,
     source, parse, transform, draw,
-    Scene, Figure, Point
+    scene,
+    Figure, Point
   } = window.ns;
-
-  const scene = new Scene('.scene');
 
   const leafColors = [
     '#9EB63A',
@@ -102,7 +101,7 @@
       model.translate(scene.getWidth() / 2);
 
       model.stems.forEach(stem => {
-        scene.drawCurveFigure(stem, { fill: '#9B9188' });
+        scene.drawFigure(stem, { fill: '#9B9188' });
       });
       model.leaves.forEach(leaf => {
         scene.drawCurveFigure(leaf, { fill: utils.randomElement(leafColors) })
@@ -124,16 +123,5 @@
   Object.assign(window.ns, {
     main,
   });
-
-  // const rect = new Figure(
-  //   new Point(0, 0),
-  //   new Point(0, 100),
-  //   new Point(200, 100),
-  //   new Point(200, 0)
-  // );
-
-  // rect.rotate(45);
-  // rect.translate(100, 200);
-  // scene.drawFigure(rect);
 
 }());
