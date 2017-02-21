@@ -68,7 +68,11 @@
     }
 
     load() {
-      const text = window.localStorage.getItem('source') || 'var foo = 42;';
+      const defaultSource = `
+      function why() {
+        return 42;
+      }`;
+      const text = window.localStorage.getItem('source') || defaultSource;
       input.value = text;
     }
 
