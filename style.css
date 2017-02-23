@@ -27,10 +27,19 @@ label {
   vertical-align: top;
 }
 
+p {
+  margin-top: 0;
+}
+
 /* Page structure */
 
 .header {
-  padding-left: 20px;
+  text-align: right;
+  padding: 10px 15px 0 0;
+}
+
+.header .title {
+  margin-right: 30px;
 }
 
 .content {
@@ -42,14 +51,14 @@ label {
 .scene {
   position: relative;
   flex: 2;
-  margin: 20px;
+  margin: 10px;
 }
 
 .side {
   display: flex;
   flex-direction: column;
   flex: 1;
-  margin: 20px;
+  margin: 10px;
 }
 
 .forkme {
@@ -94,7 +103,7 @@ label {
   margin: 0;
   padding: 1px 5px;
   list-style-type: none;
-  background-color: #fdfdfd;
+  background-color: #d8d8d8;
   border-bottom: 2px solid #f3f3f3;
 }
 
@@ -120,7 +129,7 @@ label {
 
 .tab {
   display: none;
-  padding-top: 10px;
+  padding: 10px;
   flex: 1;
 }
 
@@ -128,19 +137,31 @@ label {
   display: flex;
 }
 
+.tab-container {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+}
+
+.tab-container .label {
+  font-size: 14px;
+  color: #a0a0a0;
+}
+
 /* Side - input tab */
 
 .source-input {
   flex: 1;
-  border: 1px solid #eee;
-  margin: 0 10px 10px 10px;
+  border: 1px solid #ccc;
   border-radius: 3px;
+  padding: 5px;
 }
 
 /* Side - Popular tab */
 
 .popular {
   margin: 0;
+  padding-left: 25px;
 }
 
 .popular li {
@@ -158,16 +179,8 @@ label {
 
 /* Side - URL tab */
 
-.url-container {
-  flex: 1;
-  display: flex;
-  align-items: flex-start;
-}
-
 .source-url {
-  width: 100%;
   border: 1px solid #ccc;
-  margin: 0 10px 10px 10px;
   padding: 5px;
   border-radius: 3px;
 }
