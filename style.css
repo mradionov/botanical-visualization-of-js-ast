@@ -52,6 +52,14 @@ label {
   margin: 20px;
 }
 
+.forkme {
+  position: absolute;
+  top: 0;
+  right: 0;
+  border: 0;
+  width: 120px;
+}
+
 /* Sections */
 
 /* Status */
