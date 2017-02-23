@@ -26,7 +26,13 @@
             <ul class="popular">
               <li data-url="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.6.1/angular.js">Angular</li>
               <li data-url="https://cdnjs.cloudflare.com/ajax/libs/backbone.js/1.3.3/backbone.js">Backbone</li>
+              <li data-url="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js">jQuery</li>
+              <li data-url="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.4/lodash.min.js">Lodash</li>
+              <li data-url="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.17.1/moment.min.js">Moment</li>
               <li data-url="https://cdnjs.cloudflare.com/ajax/libs/react/15.4.2/react.min.js">React</li>
+              <li data-url="https://cdnjs.cloudflare.com/ajax/libs/redux/3.6.0/redux.min.js">Redux</li>
+              <li data-url="https://cdnjs.cloudflare.com/ajax/libs/three.js/84/three.min.js">Three.js</li>
+              <li data-url="https://cdnjs.cloudflare.com/ajax/libs/vue/2.1.10/vue.min.js">Vue</li>
             </ul>
           </div>
         </div>
@@ -76,7 +82,7 @@
               checked
             />
             <label for="settings-remove-same-children">
-              Remove similar children
+              Remove similar children *
             </label>
           </div>
           <div class="setting">
@@ -87,7 +93,7 @@
               checked
             />
             <label for="settings-remove-tiny-children">
-              Remove insignificant children
+              Remove insignificant children *
             </label>
           </div>
           <div class="setting">
@@ -101,6 +107,9 @@
               Display leaves
             </label>
           </div>
+          <p>
+          * - modifies AST
+          </p>
         </form>
       </div>
     </div>
