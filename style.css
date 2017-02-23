@@ -27,10 +27,6 @@ label {
   vertical-align: top;
 }
 
-p {
-  margin-top: 0;
-}
-
 /* Page structure */
 
 .header {
@@ -144,6 +140,7 @@ p {
 }
 
 .tab-container .label {
+  margin-top: 0;
   font-size: 14px;
   color: #a0a0a0;
 }
