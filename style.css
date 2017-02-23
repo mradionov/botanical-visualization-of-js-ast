@@ -1,3 +1,5 @@
+/* General */
+
 html, body {
   margin: 0;
   padding: 0;
@@ -13,6 +15,19 @@ html, body {
   color: #222222;
   font-family: "Courier New", Courier, monospace;
 }
+
+input[type="radio"],
+input[type="checkbox"] {
+  margin-left: 0;
+  margin-right: 0;
+}
+
+label {
+  margin-right: 5px;
+  vertical-align: top;
+}
+
+/* Page structure */
 
 .header {
   padding-left: 20px;
@@ -30,6 +45,17 @@ html, body {
   margin: 20px;
 }
 
+.side {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  margin: 20px;
+}
+
+/* Sections */
+
+/* Status */
+
 .status {
   position: absolute;
   top: 0;
@@ -44,16 +70,7 @@ html, body {
   color: #a50000;
 }
 
-canvas {
-  border-bottom: 1px solid #e8e8e8;
-}
-
-.side {
-  display: flex;
-  flex-direction: column;
-  flex: 1;
-  margin: 20px;
-}
+/* Side navigation */
 
 .source {
   display: flex;
@@ -103,6 +120,21 @@ canvas {
   display: flex;
 }
 
+/* Side - input tab */
+
+.source-input {
+  flex: 1;
+  border: 1px solid #eee;
+  margin: 0 10px 10px 10px;
+  border-radius: 3px;
+}
+
+/* Side - Popular tab */
+
+.popular {
+  margin: 0;
+}
+
 .popular li {
   cursor: pointer;
 }
@@ -116,12 +148,23 @@ canvas {
   font-weight: bold;
 }
 
-.source textarea {
+/* Side - URL tab */
+
+.url-container {
   flex: 1;
-  border: 1px solid #eee;
+  display: flex;
+  align-items: flex-start;
+}
+
+.source-url {
+  width: 100%;
+  border: 1px solid #ccc;
   margin: 0 10px 10px 10px;
+  padding: 5px;
   border-radius: 3px;
 }
+
+/* Side - actions */
 
 .actions {
   flex: 0;
@@ -129,6 +172,18 @@ canvas {
   padding-left: 2px;
 }
 
+.button-draw {
+  border: 1px solid #7fab07;
+  background-color: #719807;
+  background-image: linear-gradient(to bottom,#8aba08,#719807);
+  color: #fff;
+  border-radius: 3px;
+  padding: 5px 15px;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+/* Side - settings */
 
 .settings {
   flex: 1;
@@ -148,26 +203,4 @@ canvas {
 
 .setting .title {
   margin-bottom: 5px;
-}
-
-button {
-  border: 1px solid #7fab07;
-  background-color: #719807;
-  background-image: linear-gradient(to bottom,#8aba08,#719807);
-  color: #fff;
-  border-radius: 3px;
-  padding: 5px 15px;
-  cursor: pointer;
-  font-size: 16px;
-}
-
-input[type="radio"],
-input[type="checkbox"] {
-  margin-left: 0;
-  margin-right: 0;
-}
-
-label {
-  margin-right: 5px;
-  vertical-align: top;
 }

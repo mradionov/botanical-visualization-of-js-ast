@@ -16,21 +16,31 @@
       <div class="source">
         <ul class="tab-nav">
           <li class="active" data-source="input">Text input</li>
-          <li data-source="popular">Popular</li>
+          <li data-source="url">URL</li>
+          <li data-source="popular">Featured</li>
         </ul>
         <div class="tabs">
           <div class="tab active">
-            <textarea>function why() { return 42; }</textarea>
+            <textarea class="source-input">function why() { return 42; }</textarea>
+          </div>
+          <div class="tab">
+            <div class="url-container">
+              <input type="text" class="source-url" />
+            </div>
           </div>
           <div class="tab">
             <ul class="popular">
-              <li data-url="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.6.1/angular.js">Angular</li>
-              <li data-url="https://cdnjs.cloudflare.com/ajax/libs/backbone.js/1.3.3/backbone.js">Backbone</li>
+              <li data-url="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.6.1/angular.js">AngularJS</li>
+              <li data-url="https://cdnjs.cloudflare.com/ajax/libs/animejs/2.0.0/anime.min.js">anime.js</li>
+              <li data-url="https://cdnjs.cloudflare.com/ajax/libs/backbone.js/1.3.3/backbone.js">Backbone.js</li>
+              <li data-url="https://cdnjs.cloudflare.com/ajax/libs/ember.js/2.11.2/ember.min.js">Ember.js</li>
+              <li data-url="https://cdnjs.cloudflare.com/ajax/libs/jasmine/2.5.2/jasmine.min.js">Jasmine</li>
               <li data-url="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js">jQuery</li>
               <li data-url="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.4/lodash.min.js">Lodash</li>
               <li data-url="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.17.1/moment.min.js">Moment</li>
               <li data-url="https://cdnjs.cloudflare.com/ajax/libs/react/15.4.2/react.min.js">React</li>
               <li data-url="https://cdnjs.cloudflare.com/ajax/libs/redux/3.6.0/redux.min.js">Redux</li>
+              <li data-url="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.3/require.min.js">Require.js</li>
               <li data-url="https://cdnjs.cloudflare.com/ajax/libs/three.js/84/three.min.js">Three.js</li>
               <li data-url="https://cdnjs.cloudflare.com/ajax/libs/vue/2.1.10/vue.min.js">Vue</li>
             </ul>
@@ -38,12 +48,12 @@
         </div>
       </div>
       <div class="actions">
-        <button onclick="ns.main();">Draw</button>
+        <button class="button-draw" onclick="ns.main();">Draw</button>
       </div>
       <div class="settings">
         <form id="settings">
           <div class="setting">
-            <div class="title">Leading branch direction:</div>
+            <label for="settings-branch-direction-alternate">Alternate</label>
             <input
               checked
               id="settings-branch-direction-random"
@@ -51,14 +61,14 @@
               type="radio"
               value="random"
             />
-            <label for="settings-branch-direction-random">Random</label>
+            <div class="title">Leading branch direction:</div>
             <input
               id="settings-branch-direction-alternate"
               name="settings-branch-direction"
               type="radio"
               value="alternate"
             />
-            <label for="settings-branch-direction-alternate">Alternate</label>
+            <label for="settings-branch-direction-random">Random</label>
             <input
               id="settings-branch-direction-right"
               name="settings-branch-direction"

@@ -9,6 +9,7 @@
 
     SOURCE_POPULAR: 'popular',
     SOURCE_INPUT: 'input',
+    SOURCE_URL: 'url',
 
   };
 

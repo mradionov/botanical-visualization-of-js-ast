@@ -5,7 +5,8 @@
   let currentSource = constants.SOURCE_INPUT;
   let currentPopularLink = null;
 
-  const input = document.querySelector('.source textarea');
+  const sourceInput = document.querySelector('.source .source-input');
+  const urlInput = document.querySelector('.source .source-url');
 
   const tabNav = document.querySelector('.tab-nav');
   const tabLinks = [].slice.call(tabNav.children);
@@ -44,25 +45,34 @@
     currentPopularLink = popularLink.dataset.url;
   });
 
-  const popularCache = {};
+  const cache = {};
 
   class Source {
 
     get() {
       if (currentSource === constants.SOURCE_INPUT) {
-        return Promise.resolve(input.value);
+        return Promise.resolve(sourceInput.value);
       }
 
-      if (popularCache[currentPopularLink]) {
-        return Promise.resolve(popularCache[currentPopularLink]);
+      let link = currentPopularLink;
+      if (currentSource === constants.SOURCE_URL) {
+        link = urlInput.value;
       }
 
-      if (!currentPopularLink) {
+      if (cache[link]) {
+        return Promise.resolve(cache[link]);
+      }
+
+      if (currentSource === constants.SOURCE_POPULAR && !link) {
         return Promise.reject('Popular source not selected');
       }
 
-      return utils.request(currentPopularLink).then((text) => {
-        popularCache[currentPopularLink] = text;
+      if (currentSource === constants.SOURCE_URL && !link.trim()) {
+        return Promise.reject('URL source is required');
+      }
+
+      return utils.request(link).then((text) => {
+        cache[link] = text;
         return text;
       });
     }
@@ -70,11 +80,11 @@
     load() {
       const defaultSource = `function why() { return 42; }`;
       const text = window.localStorage.getItem('source') || defaultSource;
-      input.value = text;
+      sourceInput.value = text;
     }
 
     save() {
-      const text = input.value.trim();
+      const text = sourceInput.value.trim();
       window.localStorage.setItem('source', text);
     }
 

@@ -32,7 +32,8 @@
       // Move one unit down to hide the gap
       const normal = mid
         .normalize()
-        .rotate(this.node.angle + 180);
+        .rotate(this.node.angle + 180)
+        .multiplyScalar(2);
       return mid.add(normal);
     }
 
