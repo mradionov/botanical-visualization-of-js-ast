@@ -28,7 +28,12 @@
     }
 
     getTopCenter() {
-      return (new Line(this.getTopLeft(), this.getTopRight())).at(0.5);
+      const mid = (new Line(this.getTopLeft(), this.getTopRight())).at(0.5);
+      // Move one unit down to hide the gap
+      const normal = mid
+        .normalize()
+        .rotate(this.node.angle + 180);
+      return mid.add(normal);
     }
 
     getMount() {
